@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Add a song{% endblock %}
+
+{%block content %}
+<h1 align="center">Add a song of your choosing</h1>
+<br />
+
+<form method="POST" enctype=multipart/form-data>
+    <div class="form-group">
+        <label for="author">Author</label>
+        <input type="text" 
+        class="form-control" 
+        id="author" 
+        name="author" 
+        placeholder="Enter Author's name"/>
+    </div>
+
+    <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" 
+        class="form-control" 
+        id="title" 
+        name="title" 
+        placeholder="Enter the song's title"/>
+    </div>
+
+    <div class="form-group">
+        <label for="location">Link the song file</label>
+        <input type="file" 
+        class="form-control" 
+        id="location" 
+        name="location" 
+        placeholder="Import the song"/>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+{% endblock %}

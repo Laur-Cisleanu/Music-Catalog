@@ -1,0 +1,128 @@
+/* General body styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #1c1c1c; /* Dark background */
+    color: #f1f1f1; /* Light text color */
+    margin: 0;
+    padding: 0;
+}
+
+/* Navigation bar styles */
+nav {
+    background-color: #333; /* Darker nav background */
+    padding: 1em;
+    position: relative;
+}
+
+nav div {
+    display: flex;
+    justify-content: flex-end;
+    transition: max-height 0.3s ease-out;
+    overflow: hidden;
+}
+
+nav a {
+    color: #f1f1f1;
+    margin-left: 1em;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 0.5em 1em;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+nav a:hover {
+    background-color: #555; /* Slightly lighter on hover */
+}
+
+nav button {
+    background-color: #444; /* Dark button background */
+    color: #f1f1f1;
+    border: none;
+    padding: 0.5em 1em;
+    border-radius: 5px;
+    cursor: pointer;
+    position: absolute; /* Position the button absolutely */
+    left: 10px; /* Adjust the left position */
+    top: 10px;
+}
+
+nav button:hover {
+    background-color: #666; /* Slightly lighter on hover */
+}
+
+nav.minimized div {
+    max-height: 0; /* Collapse the navigation */
+    padding: 0;
+}
+
+nav div {
+    max-height: 200px; /* Max height for expanded nav */
+}
+
+/* Ensure links don't appear when minimized */
+nav.minimized div a {
+    display: none;
+}
+
+/* Alert message styles */
+.alert {
+    margin: 1em 0;
+    padding: 1em;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.alert-danger {
+    background-color: #d9534f; /* Red background for error */
+    color: #fff;
+}
+
+.alert-success {
+    background-color: #5cb85c; /* Green background for success */
+    color: #fff;
+}
+
+.alert .close {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.2em;
+    margin-left: 1em;
+}
+
+.alert .close:hover {
+    color: #000;
+}
+
+/* Container styles */
+.container {
+    max-width: 1200px;
+    margin: 2em auto;
+    padding: 1em;
+    background-color: #262626; /* Darker container background */
+    border-radius: 10px;
+}
+
+/* Links within the content */
+.container a {
+    color: #9acd32; /* Light green links */
+    text-decoration: none;
+}
+
+.container a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    nav div {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    nav a {
+        margin-left: 0;
+        margin-bottom: 0.5em;
+    }
+}
