@@ -2,13 +2,14 @@ from flask import Blueprint, render_template, request, url_for, redirect, flash
 from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
 # from .models import Songs
+import random
 from os import path
 from . import app, db, cursor
 
 views = Blueprint('views', __name__)
 
-UPLOAD_FOLDER = r'D:\Azimut curs online Python\efwfwefwefweew\website\uploads'
-ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'mp3', 'mp4'}
+UPLOAD_FOLDER = r'D:\Python\Projects\Music-Catalog\website\static\uploads'
+ALLOWED_EXTENSIONS = {'mp3', 'mp4'}
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -19,9 +20,13 @@ def allowed_file(filename):
 @views.route('/')
 @login_required
 def home():
-    cursor.execute('SELECT author, title, username FROM songs')
+    cursor.execute('SELECT author, title, username, location, id FROM songs')
     songs = cursor.fetchall()
-    return render_template("home.html", user = current_user, songs = songs)
+
+    cursor.execute('SELECT * FROM playlists WHERE user_id = ?', (current_user.user_id,))
+    playlists = cursor.fetchall()
+
+    return render_template("home.html", user = current_user, songs = songs, playlists = playlists)
 
 @views.route('/add_song', methods = ['POST', 'GET'])
 @login_required
@@ -69,3 +74,30 @@ def delete_song(id):
         return redirect(url_for('views.home'))
     except Exception as e:
         print(e)
+
+@views.route('/view_playlists')
+@login_required
+def view_playlists():
+    cursor.execute('SELECT name, user_id, username FROM playlists')
+    playlists = cursor.fetchall()
+    return render_template("view_playlists.html", user = current_user, playlists = playlists)
+
+@views.route('/create_playlist')
+@login_required
+def create_playlist(song_id):
+    cursor.execute('SELECT * FROM songs WHERE id = ?', (song_id,))
+    song = cursor.fetchall()
+
+    playlist_id = random.randint(100000, 999999)
+    name = request.form['name']
+    user_id = current_user.user_id
+    username = current_user.username
+    song_id = song.id
+    title = song.title
+    entry = 1
+    private = 0
+    cursor.execute("""INSERT INTO playlists (playlist_id, name, user_id, username, song_id, title, entry, private)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
+                   (playlist_id, name, user_id, username, song_id, title, entry, private))
+    db.commit()
+    return redirect(url_for('views.home'))

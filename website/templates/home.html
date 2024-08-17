@@ -12,12 +12,46 @@
         <th>Author</th>
         <th>Title</th>
         <th>Added by</th>
+        <th>Play!</th>
+        <th></th>
+
     </tr>
     {% for song in songs %}
     <tr>
         <th>{{ song[0] }}</th>
         <th>{{ song[1] }}</th>
         <th>{{ song[2] }}</th>
+        <th>
+            <audio controls>
+                <source src="{{ url_for('static', filename = 'uploads/' + song[3]) }}" type="audio/mpeg">
+                    Your browser does not support the audio element.
+            </audio>
+        </th>
+        <th>
+            <div class="dropdown">
+                <button class="dropbtn">Options</button>
+                <div class="dropdown-content">
+                    <button onclick="">Edit</button>
+                    <div class="dropdown-secondary">
+                        <button>Add to playlist</button>
+                        <div class="dropdown-secondary-content">
+                            {% for playlist in playlists %}
+                            <button onclick="">{{ playlist[2] }}</button>
+                            {% endfor %}
+                            <form class="PL-form" id="myForm">
+                                <input type="hidden" id="song_id" name="song_id" value="{{ song[4] }}" />
+                                <div>
+                                    <input class="PL-form" type="text" id="name" name="name" placeholder="Type and press Enter" />
+                                </div>
+                                
+                            </form>
+                        </div>
+                    </div>
+                    <button onclick="">Delete</button>
+                    <button onclick="">Share</button>
+                </div>
+            </div>
+        </th>
     </tr>
     {% endfor %}
 </table>

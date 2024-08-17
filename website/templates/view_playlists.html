@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}<h1>Playlists</h1>{% endblock %}
+
+{%block content %}
+
+<h1 align="center">Recent playlists</h1>
+<br />
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Made by</th>
+        <th></th>
+    </tr>
+    {% for playlist in playlists %}
+    <tr>
+        <th>{{ playlist[0] }}</th>
+        <th>{{ playlist[2] }}</th>
+        <th></th>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

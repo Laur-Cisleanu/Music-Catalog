@@ -4,6 +4,7 @@ from .database import Database
 # from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from .models import Users, session
+from .utils import create_folder
 
 app = Flask(__name__)
 
@@ -15,12 +16,16 @@ def create_app():
     app.config['SECRET_KEY'] = 'gulu gulu'
     # app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
     
-    with open(r'D:\Azimut curs online Python\efwfwefwefweew\website\schema.sql') as f:
+    
+
+    with open(r'D:\Python\Projects\Music-Catalog\website\schema.sql') as f:
         cursor.executescript(f.read())
     db.commit()
 
-    from .views import views
+    from .views import views, UPLOAD_FOLDER
     from .auth import auth
+
+    create_folder(UPLOAD_FOLDER)
 
     app.register_blueprint(views, url_prefix = '/')
     app.register_blueprint(auth, url_prefix = '/')

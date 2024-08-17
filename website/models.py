@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from flask_login import UserMixin
 
-engine = create_engine('sqlite:///D:\Azimut curs online Python\efwfwefwefweew\library.db', echo=True)
+engine = create_engine('sqlite:///D:\Python\Projects\Music-Catalog\library.db', echo=True)
 Base = declarative_base()
 
 #class Songs(db.Model):
