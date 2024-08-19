@@ -10,14 +10,12 @@ app = Flask(__name__)
 
 db = Database()
 cursor = db.get_cursor()
-DB_NAME = "database.db"
+# DB_NAME = "database.db"
 
 def create_app():
     app.config['SECRET_KEY'] = 'gulu gulu'
     # app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
     
-    
-
     with open(r'D:\Python\Projects\Music-Catalog\website\schema.sql') as f:
         cursor.executescript(f.read())
     db.commit()

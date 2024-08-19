@@ -13,8 +13,8 @@
     </tr>
     {% for playlist in playlists %}
     <tr>
-        <th>{{ playlist[0] }}</th>
-        <th>{{ playlist[2] }}</th>
+        <th><a href="{{ url_for('views.view_playlist', playlist_id = playlist[1]) }}">{{ playlist[2] }}</a></th>
+        <th>{{ playlist[4] }}</th>
         <th></th>
     </tr>
     {% endfor %}

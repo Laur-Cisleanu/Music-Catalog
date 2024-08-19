@@ -1,30 +1,27 @@
 {% extends "base.html" %}
-{% block title %}Changed{% endblock %}
+{%  block title %}{{ playlist_name }}{% endblock %}
 
-{%block content %}
-<h1 align="center">This is the home page</h1>
-<br />
-<h2 align="center">These are the user added songs!</h2>
+{%  block content %}
+<h1 align="center">{{ playlist_name }}</h1>
 <br />
 
 <table>
     <tr>
-        <th><a href="{{ url_for('views.search', sort_by = 'author', order = 'desc') }}">Author</a></th>
+        <th>Author</th>
         <th>Title</th>
-        <th>Genre</th>
         <th>Added by</th>
         <th>Play!</th>
         <th></th>
+
     </tr>
     {% for song in songs %}
     <tr>
         <th>{{ song[0] }}</th>
         <th>{{ song[1] }}</th>
-        <th>{{ song[5] }}</th>
         <th>{{ song[2] }}</th>
         <th>
             <audio controls>
-                <source src="{{ url_for('static', filename = 'uploads/' + song[3]) }}" type="audio/mpeg">
+                <source src="{{ url_for('static', filename = 'uploads/' + location) }}" type="audio/mpeg">
                     Your browser does not support the audio element.
             </audio>
         </th>
@@ -32,21 +29,21 @@
             <div class="dropdown">
                 <button class="dropbtn">Options</button>
                 <div class="dropdown-content">
-                    <a   href="{{ url_for('views.edit_song', id = song[4]) }}">Edit</a>
+                    <button onclick="">Edit</button>
                     <div class="dropdown-secondary">
                         <button>Add to playlist</button>
                         <div class="dropdown-secondary-content">
                             {% for playlist in playlists %}
-                            <a href="{{ url_for('views.add_to_playlist', playlist_id = playlist[1], song_id = song[4]) }}">{{ playlist[2] }}</a>
+                            <a href="{{ url_for('views.add_to_playlist', playlist_id = playlist[1], song_id = song[3]) }}">{{ playlist[2] }}</a>
                             {% endfor %}
-                            <form class="PL-form" action="{{ url_for('views.create_playlist', song_id = song[4]) }}" method="POST">
+                            <form class="PL-form" action="{{ url_for('views.create_playlist', song_id = song[3]) }}" method="POST">
                                 <div>
                                     <input class="PL-form" type="text" id="name" name="name" placeholder="Type and press Enter" />
                                 </div>
                             </form>
                         </div>
                     </div>
-                    <a   href="{{ url_for('views.delete_song', id = song[4]) }}">Delete</a>
+                    <button onclick="">Delete</button>
                     <button onclick="">Share</button>
                 </div>
             </div>
@@ -54,5 +51,4 @@
     </tr>
     {% endfor %}
 </table>
-<a href="{{ url_for('views.add_song') }}">Add Song</a>
 {% endblock %}

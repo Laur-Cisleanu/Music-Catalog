@@ -20,10 +20,19 @@ def allowed_file(filename):
 @views.route('/')
 @login_required
 def home():
-    cursor.execute('SELECT author, title, username, location, id FROM songs')
-    songs = cursor.fetchall()
+    cursor.execute('SELECT author, title, username, location, id, genre FROM songs')
+    songs = cursor.fetchall() 
+    cursor.execute('SELECT * FROM playlists WHERE user_id = ? AND entry = 1', (current_user.user_id,))
+    playlists = cursor.fetchall()
 
-    cursor.execute('SELECT * FROM playlists WHERE user_id = ?', (current_user.user_id,))
+    return render_template("home.html", user = current_user, songs = songs, playlists = playlists)
+
+@views.route('/search/<sort_by>/<order>')
+@login_required
+def search(sort_by, order):
+    cursor.execute(f'SELECT author, title, username, location, id, genre FROM songs ORDER BY {sort_by} {order}')
+    songs = cursor.fetchall() 
+    cursor.execute('SELECT * FROM playlists WHERE user_id = ? AND entry = 1', (current_user.user_id,))
     playlists = cursor.fetchall()
 
     return render_template("home.html", user = current_user, songs = songs, playlists = playlists)
@@ -33,8 +42,10 @@ def home():
 def add_song():
     if request.method == 'POST':
 
-        title = request.form['title']
         author = request.form['author']
+        title = request.form['title']
+        genre = request.form['genre']
+        description = request.form['description']
         user = current_user.username
         user_id = current_user.user_id
 
@@ -53,8 +64,8 @@ def add_song():
 
             # add a duplicate verification
 
-            cursor.execute('INSERT INTO songs (title, location, author, username, user_id) VALUES (?, ?, ?, ?, ?)', 
-                           (title, filename, author, user, user_id))
+            cursor.execute("""INSERT INTO songs (title, location, author, genre, description, username, user_id) 
+                            VALUES (?, ?, ?, ?, ?, ?, ?)""", (title, filename, author, genre, description, user, user_id))
             db.commit()
 
             # new_song = Songs(data = filename, user_id = current_user.id)
@@ -65,11 +76,36 @@ def add_song():
 
     return render_template("add_song.html", user = current_user)
 
+@views.route('/edit_song/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_song(id):
+    cursor.execute('SELECT * FROM songs WHERE id = ?', (id, ))
+    song = cursor.fetchone()
+    user_id = song[6]
+    
+    if user_id == current_user.user_id:
+        if request.method == 'POST':
+            title = request.form['title']
+            author = request.form['author']
+            genre = request.form['genre']
+            description = "" + request.form['description']
+
+            cursor.execute('UPDATE songs SET title = ?, author = ?, genre = ?, description = ? WHERE id = ?', 
+                           (title, author, genre, description, id))
+            db.commit()
+            return redirect(url_for('views.home'))
+        
+        return render_template("edit_song.html", user = current_user, song = song)
+    else:
+        flash('You don\'t have access', category = 'error')
+    return redirect(url_for('views.home'))
+        
 @views.route('/delete_song/<int:id>', methods=['GET', 'POST'])
 @login_required
 def delete_song(id):
     try:
         cursor.execute('DELETE FROM songs WHERE id = ?', (id,))
+        cursor.execute('DELETE FROM playlists WHERE song_id = ?', (id,))
         db.commit()
         return redirect(url_for('views.home'))
     except Exception as e:
@@ -78,26 +114,68 @@ def delete_song(id):
 @views.route('/view_playlists')
 @login_required
 def view_playlists():
-    cursor.execute('SELECT name, user_id, username FROM playlists')
+    cursor.execute('SELECT * FROM playlists WHERE entry = 1')
     playlists = cursor.fetchall()
     return render_template("view_playlists.html", user = current_user, playlists = playlists)
 
-@views.route('/create_playlist')
+@views.route('/create_playlist/<int:song_id>', methods = ['POST', 'GET'])
 @login_required
 def create_playlist(song_id):
-    cursor.execute('SELECT * FROM songs WHERE id = ?', (song_id,))
-    song = cursor.fetchall()
+    if request.method == 'POST':
+        cursor.execute('SELECT * FROM songs WHERE id = ?', (song_id,))
+        song = cursor.fetchone()
+    
+        playlist_id = random.randint(100000, 999999)
+        name = request.form['name']
+        user_id = current_user.user_id
+        username = current_user.username
+        song_id = song[0]
+        title = song[1]
+        author = song[3]
+        entry = 1
+        private = 0
+        cursor.execute("""INSERT INTO playlists (playlist_id, name, user_id, username, song_id, title, 
+                       author, entry, private) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                       (playlist_id, name, user_id, username, song_id, title, author, entry, private))
+        db.commit()
+        return redirect(url_for('views.home'))
 
-    playlist_id = random.randint(100000, 999999)
-    name = request.form['name']
+@views.route('/add_to_playlist/<int:playlist_id>/<int:song_id>')
+@login_required
+def add_to_playlist(playlist_id, song_id):
+    user_id = current_user.user_id
+    cursor.execute('SELECT name, private FROM playlists WHERE playlist_id = ? AND user_id = ?',
+                   (playlist_id, user_id))
+    playlist = cursor.fetchone()
+    name = playlist[0]
     user_id = current_user.user_id
     username = current_user.username
-    song_id = song.id
-    title = song.title
-    entry = 1
-    private = 0
-    cursor.execute("""INSERT INTO playlists (playlist_id, name, user_id, username, song_id, title, entry, private)
-                   VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
-                   (playlist_id, name, user_id, username, song_id, title, entry, private))
+    cursor.execute('SELECT title, author FROM songs WHERE id = ?', (song_id,))
+    song_info = cursor.fetchone()
+    title = song_info[0]
+    author = song_info[1]
+    cursor.execute('SELECT COUNT(entry) FROM playlists WHERE playlist_id = ? AND user_id = ?', (playlist_id, user_id))
+    entry = cursor.fetchone()[0]
+    entry += 1
+    private = playlist[1]
+    cursor.execute("""INSERT INTO playlists (playlist_id, name, user_id, username, song_id, title, author, entry, private)
+                       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                       (playlist_id, name, user_id, username, song_id, title, author, entry, private))
     db.commit()
     return redirect(url_for('views.home'))
+
+@views.route('/view_playlist/<int:playlist_id>')
+@login_required
+def view_playlist(playlist_id):
+    cursor.execute('SELECT author, title, username, song_id, entry, name FROM playlists WHERE playlist_id = ?',
+                   (playlist_id,))
+    songs = cursor.fetchall()
+    playlist_name = songs[0][5]
+    cursor.execute('SELECT location FROM songs WHERE id = ?', (songs[0][3],))
+    location = cursor.fetchone()
+
+    cursor.execute('SELECT * FROM playlists WHERE user_id = ? AND entry = 1', (current_user.user_id,))
+    playlists = cursor.fetchall()
+
+    return render_template("view_playlist.html", user = current_user, songs = songs, 
+                           location = location[0], playlist_name = playlist_name, playlists = playlists)
