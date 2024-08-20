@@ -2,21 +2,15 @@
 {% block title %}Changed{% endblock %}
 
 {%block content %}
-{% if not sort_by and not order %}
-<h1 align="center">This is the home page</h1>
+<h1>Searching</h1>
 <br />
-<h2 align="center">These are the user added songs!</h2>
-<br />
-{% else %}
-<h1 align="center">ooga</h1>
-{% endif %}
 
 <table>
     <tr>
-        <th><a href="{{ url_for('views.sort', sort_by = 'author', order = 'desc') }}">Author</a></th>
-        <th><a href="{{ url_for('views.sort', sort_by = 'title', order = 'desc') }}">Title</a></th>
-        <th><a href="{{ url_for('views.sort', sort_by = 'genre', order = 'desc') }}">Genre</a></th>
-        <th><a href="{{ url_for('views.sort', sort_by = 'username', order = 'desc') }}">Added by</a></th>
+        <th><a href="{{ url_for('views.search_sort', sort_by = 'author', order = 'desc', search_by = search_by) }}">Author</a></th>
+        <th><a href="{{ url_for('views.search_sort', sort_by = 'title', order = 'desc', search_by = search_by) }}">Title</a></th>
+        <th><a href="{{ url_for('views.search_sort', sort_by = 'genre', order = 'desc', search_by = search_by) }}">Genre</a></th>
+        <th><a href="{{ url_for('views.search_sort', sort_by = 'username', order = 'desc', search_by = search_by) }}">Added by</a></th>
         <th>Play!</th>
         <th></th>
     </tr>

@@ -27,15 +27,44 @@ def home():
 
     return render_template("home.html", user = current_user, songs = songs, playlists = playlists)
 
-@views.route('/search/<sort_by>/<order>')
+@views.route('/sort/<sort_by>/<order>')
 @login_required
-def search(sort_by, order):
+def sort(sort_by, order):
     cursor.execute(f'SELECT author, title, username, location, id, genre FROM songs ORDER BY {sort_by} {order}')
     songs = cursor.fetchall() 
     cursor.execute('SELECT * FROM playlists WHERE user_id = ? AND entry = 1', (current_user.user_id,))
     playlists = cursor.fetchall()
 
-    return render_template("home.html", user = current_user, songs = songs, playlists = playlists)
+    return render_template("home.html", user = current_user, songs = songs, playlists = playlists, 
+                            sort_by = sort_by, order = order)
+
+@views.route('/search', methods = ['POST', 'GET'])
+@login_required
+def search():
+    if request.method == 'POST':
+        search_by = f'%{request.form['search_by']}%'
+        cursor.execute("""SELECT author, title, username, location, id, genre FROM songs 
+                       WHERE  title LIKE ? OR author LIKE ? OR username LIKE ? OR genre LIKE ?""", 
+                       (search_by, search_by, search_by, search_by, ))
+        songs = cursor.fetchall()
+        cursor.execute('SELECT * FROM playlists WHERE user_id = ? AND entry = 1', (current_user.user_id,))
+        playlists = cursor.fetchall()
+        
+        return render_template("search.html", user = current_user, songs = songs, playlists = playlists, 
+                                search_by = search_by)
+    
+@views.route('/search/<sort_by>/<order>')
+@login_required
+def search_sort(sort_by, order):
+    search_by = request.args.get('search_by')
+    cursor.execute(f"""SELECT author, title, username, location, id, genre FROM songs 
+                   WHERE  title LIKE ? OR author LIKE ? OR username LIKE ? OR genre LIKE ?
+                   ORDER BY {sort_by} {order}""", (search_by, search_by, search_by, search_by, ))
+    songs = cursor.fetchall()
+    cursor.execute('SELECT * FROM playlists WHERE user_id = ? AND entry = 1', (current_user.user_id,))
+    playlists = cursor.fetchall()
+    return render_template("search.html", user = current_user, songs = songs, playlists = playlists, 
+                            search_by = search_by, sort_by = sort_by, order = order)
 
 @views.route('/add_song', methods = ['POST', 'GET'])
 @login_required
