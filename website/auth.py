@@ -44,10 +44,13 @@ def sign_up():
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
 
-        cursor.execute('SELECT * FROM users WHERE email = ?', (email, ))
+        cursor.execute('SELECT * FROM users WHERE email = ? OR username = ?', (email, username))
         user = cursor.fetchone()
-        if user:
-            flash('An account with the same email already exists.', category = 'error')
+        if user: 
+            if user[1] == email:
+                flash('An account with the same email already exists.', category = 'error')
+            elif user[2]:
+                flash('An account with the same username already exists.', category = 'error')
         elif len(email) < 4:
             flash('Email must be longer than 3 characters.', category = 'error')
         elif len(username) < 4:

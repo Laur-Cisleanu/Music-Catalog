@@ -5,19 +5,24 @@
 
 <h1 align="center">Recent playlists</h1>
 <br />
-<table>
-    <tr>
-        <th>Name</th>
-        <th>Made by</th>
-        <th></th>
-    </tr>
-    {% for playlist in playlists %}
-    <tr>
-        <th><a href="{{ url_for('views.view_playlist', playlist_id = playlist[1]) }}">{{ playlist[2] }}</a></th>
-        <th>{{ playlist[4] }}</th>
-        <th></th>
-    </tr>
-    {% endfor %}
-</table>
+<div class="main-content">
+    <div class="central-view">
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Made by</th>
+                <th></th>
+            </tr>
+            {% for playlist in playlists %}
+            <tr>
+                <td><a href="{{ url_for('views.view_playlist', playlist_id = playlist[1]) }}">{{ playlist[2] }}</a></td>
+                <td>{{ playlist[4] }}</td>
+                <td></td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+        
 
 {% endblock %}

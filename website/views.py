@@ -132,13 +132,22 @@ def edit_song(id):
 @views.route('/delete_song/<int:id>', methods=['GET', 'POST'])
 @login_required
 def delete_song(id):
-    try:
-        cursor.execute('DELETE FROM songs WHERE id = ?', (id,))
-        cursor.execute('DELETE FROM playlists WHERE song_id = ?', (id,))
-        db.commit()
+    cursor.execute('SELECT * FROM songs WHERE id = ?', (id, ))
+    song = cursor.fetchone()
+    user_id = song[6]
+
+    if user_id == current_user.user_id:
+        try:
+            cursor.execute('DELETE FROM songs WHERE id = ?', (id,))
+            cursor.execute('DELETE FROM playlists WHERE song_id = ?', (id,))
+            db.commit()
+            return redirect(url_for('views.home'))
+        except Exception as e:
+            print(e)
+    else:
+        flash('You don\'t have access', category = 'error')
         return redirect(url_for('views.home'))
-    except Exception as e:
-        print(e)
+    
 
 @views.route('/view_playlists')
 @login_required

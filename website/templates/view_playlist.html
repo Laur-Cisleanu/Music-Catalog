@@ -5,50 +5,54 @@
 <h1 align="center">{{ playlist_name }}</h1>
 <br />
 
-<table>
-    <tr>
-        <th>Author</th>
-        <th>Title</th>
-        <th>Added by</th>
-        <th>Play!</th>
-        <th></th>
-
-    </tr>
-    {% for song in songs %}
-    <tr>
-        <th>{{ song[0] }}</th>
-        <th>{{ song[1] }}</th>
-        <th>{{ song[2] }}</th>
-        <th>
-            <audio controls>
-                <source src="{{ url_for('static', filename = 'uploads/' + location) }}" type="audio/mpeg">
-                    Your browser does not support the audio element.
-            </audio>
-        </th>
-        <th>
-            <div class="dropdown">
-                <button class="dropbtn">Options</button>
-                <div class="dropdown-content">
-                    <button onclick="">Edit</button>
-                    <div class="dropdown-secondary">
-                        <button>Add to playlist</button>
-                        <div class="dropdown-secondary-content">
-                            {% for playlist in playlists %}
-                            <a href="{{ url_for('views.add_to_playlist', playlist_id = playlist[1], song_id = song[3]) }}">{{ playlist[2] }}</a>
-                            {% endfor %}
-                            <form class="PL-form" action="{{ url_for('views.create_playlist', song_id = song[3]) }}" method="POST">
-                                <div>
-                                    <input class="PL-form" type="text" id="name" name="name" placeholder="Type and press Enter" />
+<div class="main-content">
+    <div class="central-view">
+        <table>
+            <tr>
+                <th>Author</th>
+                <th>Title</th>
+                <th>Added by</th>
+                <th>Play!</th>
+                <th></th>
+        
+            </tr>
+            {% for song in songs %}
+            <tr>
+                <td>{{ song[0] }}</td>
+                <td>{{ song[1] }}</td>
+                <td>{{ song[2] }}</td>
+                <td>
+                    <audio controls>
+                        <source src="{{ url_for('static', filename = 'uploads/' + location) }}" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                    </audio>
+                </td>
+                <td>
+                    <div class="dropdown">
+                        <button class="dropbtn">Options</button>
+                        <div class="dropdown-content">
+                            <button onclick="">Edit</button>
+                            <div class="dropdown-secondary">
+                                <button>Add to playlist</button>
+                                <div class="dropdown-secondary-content">
+                                    {% for playlist in playlists %}
+                                    <a href="{{ url_for('views.add_to_playlist', playlist_id = playlist[1], song_id = song[3]) }}">{{ playlist[2] }}</a>
+                                    {% endfor %}
+                                    <form class="PL-form" action="{{ url_for('views.create_playlist', song_id = song[3]) }}" method="POST">
+                                        <div>
+                                            <input class="PL-form" type="text" id="name" name="name" placeholder="Type and press Enter" />
+                                        </div>
+                                    </form>
                                 </div>
-                            </form>
+                            </div>
+                            <button onclick="">Delete</button>
+                            <button onclick="">Share</button>
                         </div>
                     </div>
-                    <button onclick="">Delete</button>
-                    <button onclick="">Share</button>
-                </div>
-            </div>
-        </th>
-    </tr>
-    {% endfor %}
-</table>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
 {% endblock %}
