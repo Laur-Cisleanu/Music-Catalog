@@ -2,7 +2,10 @@ CREATE TABLE IF NOT EXISTS users (
     user_id INTEGER PRIMARY KEY AUTOINCREMENT,
     email TEXT NOT NULL,
     username TEXT NOT NULL,
-    password TEXT NOT NULL
+    password TEXT NOT NULL,
+    admin INTEGER NOT NULL,
+    user_description TEXT,
+    profile_picture TEXT
 );
 
 CREATE TABLE IF NOT EXISTS songs (
@@ -36,12 +39,3 @@ CREATE TABLE IF NOT EXISTS playlists (
     FOREIGN KEY (song_id) REFERENCES songs(id),
     FOREIGN KEY (author) REFERENCES songs(author)
 );
-
-CREATE TABLE IF NOT EXISTS users_info (
-    entry_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER NOT NULL,
-    playlist_id INTEGER,
-    user_description TEXT,
-    FOREIGN KEY (user_id) REFERENCES users(user_id),
-    FOREIGN KEY (playlist_id) REFERENCES playlists(playlist_id)
-);  

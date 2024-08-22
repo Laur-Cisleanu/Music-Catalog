@@ -6,6 +6,8 @@ from flask_login import login_user, login_required, logout_user, current_user
 
 auth = Blueprint('auth', __name__)
 
+ADMIN_PASSWORD = '123456789admin'
+
 @auth.route('/login', methods = ['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -46,6 +48,10 @@ def sign_up():
 
         cursor.execute('SELECT * FROM users WHERE email = ? OR username = ?', (email, username))
         user = cursor.fetchone()
+        if password1 == ADMIN_PASSWORD:
+            admin = 1
+        else:
+            admin = 0 
         if user: 
             if user[1] == email:
                 flash('An account with the same email already exists.', category = 'error')
@@ -60,8 +66,8 @@ def sign_up():
         elif len(password1) < 4:
             flash('Password must be longer than 3 characters.', category = 'error')
         else:
-            cursor.execute('INSERT INTO users (email, username, password) VALUES (?,?,?)', 
-                            (email, username, generate_password_hash(password1, method = 'pbkdf2:sha256')))
+            cursor.execute('INSERT INTO users (email, username, password, admin) VALUES (?, ?, ?, ?)', 
+                            (email, username, generate_password_hash(password1, method = 'pbkdf2:sha256'), admin))
             db.commit()
             
             cursor.execute('SELECT user_id FROM users WHERE email = ?', (email,))

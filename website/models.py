@@ -39,49 +39,46 @@ session = Session()
 
 
 
-"""
 
 
-base = declarative_base()
-
-class Songs(base):
-    __tablename__ = "Songs"
-
-    id = Column("Id", Integer, primary_key = True)
-    data = Column("link", String(10000))
-    user_id = Column("User_Id", Integer, ForeignKey('user.id'))
-
-    def __init__(self, id, data, user_id):
-        self.id = id
-        self.data = data
-        self.user_id = user_id
-
-    def __repr__(self):
-        return f"({self.id}) {self.data}, user_id = {self.user_id}"
-
-class Users(base, UserMixin):
-    __tablename__ = "Users"
-
-    id = Column("Id", Integer, primary_key = True)
-    email = Column("Email", String(150), unique = True)
-    username = Column("Username", String(150), unique = True)
-    password = Column("Password", String(150))
-    songs = db.relationship('Songs')
-
-    def __init__(self, id, email, username, password, songs):
-        self.id = id
-        self.email = email
-        self.username = username
-        self.password = password
-        self.songs = songs
-
-    def __repr__(self):
-        return f"({self.id}) {self.email}, {self.username}, {self.password}, {self.songs}"
-
-engine = create_engine("sqlite:///mydb.db" echo = True)
-base.metadata.create_all(bind=engine)
-
-Session = sessionmaker(bind = engine)
-session = Session()
-
-"""
+#base = declarative_base()
+#
+#class Songs(base):
+#    __tablename__ = "Songs"
+#
+#    id = Column("Id", Integer, primary_key = True)
+#    data = Column("link", String(10000))
+#    user_id = Column("User_Id", Integer, ForeignKey('user.id'))
+#
+#    def __init__(self, id, data, user_id):
+#        self.id = id
+#        self.data = data
+#        self.user_id = user_id
+#
+#    def __repr__(self):
+#        return f"({self.id}) {self.data}, user_id = {self.user_id}"
+#
+#class Users(base, UserMixin):
+#    __tablename__ = "Users"
+#
+#    id = Column("Id", Integer, primary_key = True)
+#    email = Column("Email", String(150), unique = True)
+#    username = Column("Username", String(150), unique = True)
+#    password = Column("Password", String(150))
+#    songs = db.relationship('Songs')
+#
+#    def __init__(self, id, email, username, password, songs):
+#        self.id = id
+#        self.email = email
+#        self.username = username
+#        self.password = password
+#        self.songs = songs
+#
+#    def __repr__(self):
+#        return f"({self.id}) {self.email}, {self.username}, {self.password}, {self.songs}"
+#
+#engine = create_engine("sqlite:///mydb.db" echo = True)
+#base.metadata.create_all(bind=engine)
+#
+#Session = sessionmaker(bind = engine)
+#session = Session()

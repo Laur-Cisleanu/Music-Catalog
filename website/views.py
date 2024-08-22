@@ -136,7 +136,7 @@ def delete_song(id):
     song = cursor.fetchone()
     user_id = song[6]
 
-    if user_id == current_user.user_id:
+    if current_user.user_id == user_id:
         try:
             cursor.execute('DELETE FROM songs WHERE id = ?', (id,))
             cursor.execute('DELETE FROM playlists WHERE song_id = ?', (id,))
