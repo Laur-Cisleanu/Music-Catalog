@@ -25,7 +25,7 @@
             {% for song in songs %}
             <tr>
                 <td>{{ song[0] }}</td>
-                <td>{{ song[1] }}</td>
+                <td><a href="{{ url_for('views.view_song', id = song[4]) }}">{{ song[1] }}</a></td>
                 <td>{{ song[5] }}</td>
                 <td>{{ song[2] }}</td>
                 <td>

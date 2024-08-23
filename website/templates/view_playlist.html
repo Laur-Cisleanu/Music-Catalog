@@ -5,7 +5,12 @@
 <h1 align="center">{{ playlist_name }}</h1>
 <br />
 
-<div class="main-content">
+<div class="main-content-edit">
+    <h2>Songs:</h2>
+    <form>
+        <a href="{{ url_for('views.edit_playlist', playlist_id = playlist_id) }}">Edit playlist</a>
+        <a href="{{ url_for('views.delete_playlist', playlist_id = playlist_id) }}">Delete Playlist</a>
+    </form>
     <div class="central-view">
         <table>
             <tr>

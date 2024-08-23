@@ -105,6 +105,14 @@ def add_song():
 
     return render_template("add_song.html", user = current_user)
 
+@views.route('/view_song/<int:id>')
+@login_required
+def view_song(id):
+    cursor.execute('SELECT * FROM songs WHERE id = ?', (id, ))
+    song = cursor.fetchone()
+
+    return render_template('view_song.html', user = current_user, song = song)
+
 @views.route('/edit_song/<int:id>', methods=['GET', 'POST'])
 @login_required
 def edit_song(id):
@@ -112,7 +120,7 @@ def edit_song(id):
     song = cursor.fetchone()
     user_id = song[6]
     
-    if user_id == current_user.user_id:
+    if user_id == current_user.user_id or current_user.admin == 1:
         if request.method == 'POST':
             title = request.form['title']
             author = request.form['author']
@@ -136,7 +144,7 @@ def delete_song(id):
     song = cursor.fetchone()
     user_id = song[6]
 
-    if current_user.user_id == user_id:
+    if current_user.user_id == user_id or current_user.admin == 1:
         try:
             cursor.execute('DELETE FROM songs WHERE id = ?', (id,))
             cursor.execute('DELETE FROM playlists WHERE song_id = ?', (id,))
@@ -216,4 +224,62 @@ def view_playlist(playlist_id):
     playlists = cursor.fetchall()
 
     return render_template("view_playlist.html", user = current_user, songs = songs, 
-                           location = location[0], playlist_name = playlist_name, playlists = playlists)
+                           location = location[0], playlist_id = playlist_id, playlist_name = playlist_name, playlists = playlists)
+
+@views.route('edit_playlist/<int:playlist_id>', methods = ['POST', 'GET'])
+@login_required
+def edit_playlist(playlist_id):
+    cursor.execute('SELECT * FROM songs JOIN playlists ON songs.id = playlists.song_id WHERE playlists.playlist_id = ?', 
+                   (playlist_id, ))
+    playlist = cursor.fetchall()
+    user_id = playlist[0][11]
+
+    if user_id == current_user.user_id or current_user.admin == 1:
+        if request.method == 'POST':
+            name = request.form['name']
+            description = request.form['description']
+            private = request.form['private']
+
+            cursor.execute('UPDATE playlists SET name = ?, description = ?, private = ? WHERE playlist_id = ?', 
+                            (name, description, private, playlist_id))
+            db.commit()
+            return redirect(url_for('views.view_playlist', playlist_id = playlist_id))
+    else:
+        flash('You don\'t have access', category = 'error')
+        return redirect(url_for('views.view_playlist', playlist_id = playlist_id))
+    return render_template('edit_playlist.html', user = current_user, playlist = playlist)
+
+@views.route('delete_playlist/<int:playlist_id>')
+@login_required
+def delete_playlist(playlist_id):
+    cursor.execute('SELECT * FROM playlists WHERE playlist_id = ?', (playlist_id, ))
+    playlist = cursor.fetchall()
+    user_id = playlist[0][3]
+    song_entry = request.args.get('song_entry')
+    print (type(playlist[-1][8]))
+    if current_user.user_id == user_id or current_user.admin == 1:
+        if song_entry:
+            cursor.execute('DELETE FROM playlists WHERE entry = ?', (song_entry, ))
+            db.commit()
+            cursor.execute('SELECT COUNT(entry) FROM playlists WHERE playlist_id = ?', (playlist[0][1], ))
+            entry_count = cursor.fetchone()[0]
+            cursor.execute('SELECT * FROM playlists WHERE playlist_id = ?', (playlist_id, ))
+            song = cursor.fetchall()
+            
+            for i in range(entry_count):
+                if song[i][8] > i+1:
+                    cursor.execute('UPDATE playlists SET entry = ? WHERE entry = ?', (i+1, song[i][8]))
+                    db.commit()
+
+            flash("Song removed from the playlist successfully")
+            return redirect(url_for('views.edit_playlist', playlist_id = playlist_id))
+    
+        try:
+            cursor.execute('DELETE FROM playlists WHERE playlist_id = ?', (playlist_id,))
+            db.commit()
+            return redirect(url_for('views.view_playlists'))
+        except Exception as e:
+            print(e)
+    else:
+        flash('You don\'t have access', category = 'error')
+        return redirect(url_for('views.view_playlist', playlist_id = playlist_id))

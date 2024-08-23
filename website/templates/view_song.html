@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}{{ song[1] }}{% endblock %}
+
+{% block content %}
+<div class="main-content-edit">
+    <h2>Song information:</h2>
+    <form>
+        <a>Edit song</a>
+        <a>Delete song</a>
+    </form>
+    <div class="central-view">
+        <table>
+            <tr>
+                <th>Author</th>
+                <th>Title</th>
+                <th>Genre</th>
+                <th>Added by</th>
+                <th>Play!</th>
+                <th></th>
+            </tr>
+            <tr>
+                <td>{{ song[3] }}</td>
+                <td>{{ song[1] }}</td>
+                <td>{{ song[4] }}</td>
+                <td>{{ song[7] }}</td>
+            </tr>
+        </table>
+    </div>
+</div>
+{% endblock %}

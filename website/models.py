@@ -1,5 +1,5 @@
 #from . import db
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, Text
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
@@ -19,12 +19,18 @@ class Users(Base, UserMixin):
     email = Column(String(150), unique = True)
     username = Column(String(150), unique = True)
     password = Column(String(1000))
+    admin = Column(Integer)
+    user_description = Column(Text)
+    profile_picture = Column(Text)
 
-    def __init__(self, user_id, email, username, password):
+    def __init__(self, user_id, email, username, password, admin, user_description, profile_picture):
         self.user_id = user_id
         self.email = email
         self.username = username
         self.password = password
+        self.admin = admin
+        self.user_description = user_description
+        self.profile_picture = profile_picture
     
     def get_id(self):
            return (self.user_id)

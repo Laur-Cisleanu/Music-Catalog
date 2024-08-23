@@ -17,7 +17,7 @@
             <tr>
                 <td><a href="{{ url_for('views.view_playlist', playlist_id = playlist[1]) }}">{{ playlist[2] }}</a></td>
                 <td>{{ playlist[4] }}</td>
-                <td></td>
+                <td><a href="{{ url_for('views.view_playlist', playlist_id = playlist[1]) }}">View Playlist</a></td>
             </tr>
             {% endfor %}
         </table>
