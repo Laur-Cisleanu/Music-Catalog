@@ -20,18 +20,31 @@ def allowed_file(filename):
 @views.route('/')
 @login_required
 def home():
-    cursor.execute('SELECT author, title, username, location, id, genre FROM songs')
+    cursor.execute('SELECT author, title, username, location, id, genre FROM songs ORDER BY id desc')
     songs = cursor.fetchall() 
+    
     cursor.execute('SELECT * FROM playlists WHERE user_id = ? AND entry = 1', (current_user.user_id,))
     playlists = cursor.fetchall()
+    
+    cursor.execute('SELECT * FROM playlists WHERE entry = 1 ORDER BY id desc')
+    playlist_view = cursor.fetchall()
+    
+    cursor.execute('SELECT COUNT(*) FROM playlists WHERE entry = 1')
+    list_index = cursor.fetchone()[0]
+    if list_index > 7:
+        list_index = 7
 
-    return render_template("home.html", user = current_user, songs = songs, playlists = playlists)
+    cursor.execute('SELECT DISTINCT genre FROM songs')
+    genres = cursor.fetchall()
+
+    return render_template("home.html", user = current_user, songs = songs, playlists = playlists, 
+                           playlist_view = playlist_view, list_index = list_index, genres = genres)
 
 @views.route('/sort/<sort_by>/<order>')
 @login_required
 def sort(sort_by, order):
     cursor.execute(f'SELECT author, title, username, location, id, genre FROM songs ORDER BY {sort_by} {order}')
-    songs = cursor.fetchall() 
+    songs = cursor.fetchall()
     cursor.execute('SELECT * FROM playlists WHERE user_id = ? AND entry = 1', (current_user.user_id,))
     playlists = cursor.fetchall()
 

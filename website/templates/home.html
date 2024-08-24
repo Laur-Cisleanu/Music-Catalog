@@ -5,14 +5,13 @@
 {% if not sort_by and not order %}
 <h1 align="center">This is the home page</h1>
 <br />
-<h2 align="center">These are the user added songs!</h2>
-<br />
 {% else %}
 <h1 align="center">ooga</h1>
 {% endif %}
 
 <div class="main-content">
     <div class="central-view">
+        <h2 align="center">These are the latest user added songs!</h2>
         <table>
             <tr>
                 <th><a href="{{ url_for('views.sort', sort_by = 'author', order = 'desc') }}">Author</a></th>
@@ -22,7 +21,7 @@
                 <th>Play!</th>
                 <th></th>
             </tr>
-            {% for song in songs %}
+            {% for song in songs[:8] %}
             <tr>
                 <td>{{ song[0] }}</td>
                 <td><a href="{{ url_for('views.view_song', id = song[4]) }}">{{ song[1] }}</a></td>
@@ -38,6 +37,7 @@
                     <div class="dropdown">
                         <button class="dropbtn">Options</button>
                         <div class="dropdown-content">
+                            <a href="{{ url_for('views.view_song', id = song[4]) }}">View</a>
                             <a   href="{{ url_for('views.edit_song', id = song[4]) }}">Edit</a>
                             <div class="dropdown-secondary">
                                 <button>Add to playlist</button>
@@ -63,8 +63,20 @@
         <a href="{{ url_for('views.add_song') }}">Add Song</a>
     </div>
     <div class="sidebar">
-        <div class="sidebar-window"></div>
-        <div class="sidebar-window"></div>
+        <div class="sidebar-window">
+            <h2>Here's some of the recent playlists:</h3>
+            {% for i in range(list_index) %}
+                <p class="playlist-homeview">{{ i+1 }} - <a>{{ playlist_view[i][2] }}</a>  -  made by {{ playlist_view[i][4] }}</p>
+            {% endfor %}
+            <p class="playlist-homeview-last">8 - <a>{{ playlist_view[7][2] }}</a>  -  made by {{ playlist_view[7][4] }}</p>
+        </div>
+        <div class="sidebar-window">
+            <p>
+                {% for genre in genres %}
+                    {{ genre[0] }} - 
+                {% endfor %}
+            </p>
+        </div>
     </div>
 </div>
 

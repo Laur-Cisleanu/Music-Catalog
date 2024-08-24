@@ -31,6 +31,7 @@
                     <div class="dropdown">
                         <button class="dropbtn">Options</button>
                         <div class="dropdown-content">
+                            <a href="{{ url_for('views.view_song', id = song[4]) }}">View</a>
                             <a   href="{{ url_for('views.edit_song', id = song[4]) }}">Edit</a>
                             <div class="dropdown-secondary">
                                 <button>Add to playlist</button>
