@@ -1,10 +1,10 @@
 from flask import Blueprint, render_template, request, url_for, redirect, flash
 from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
-# from .models import Songs
 import random
 from os import path
 from . import app, db, cursor
+from .utils import allowed_file
 
 views = Blueprint('views', __name__)
 
@@ -12,10 +12,6 @@ UPLOAD_FOLDER = r'D:\Python\Projects\Music-Catalog\website\static\uploads'
 ALLOWED_EXTENSIONS = {'mp3', 'mp4'}
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @views.route('/')
 @login_required
@@ -36,9 +32,9 @@ def home():
 
     cursor.execute('SELECT DISTINCT genre FROM songs')
     genres = cursor.fetchall()
-
+    genres_len = len(genres)
     return render_template("home.html", user = current_user, songs = songs, playlists = playlists, 
-                           playlist_view = playlist_view, list_index = list_index, genres = genres)
+                           playlist_view = playlist_view, list_index = list_index, genres = genres, genres_len = genres_len)
 
 @views.route('/sort/<sort_by>/<order>')
 @login_required
@@ -48,28 +44,45 @@ def sort(sort_by, order):
     cursor.execute('SELECT * FROM playlists WHERE user_id = ? AND entry = 1', (current_user.user_id,))
     playlists = cursor.fetchall()
 
-    return render_template("home.html", user = current_user, songs = songs, playlists = playlists, 
+    return render_template("songs.html", user = current_user, songs = songs, playlists = playlists, 
                             sort_by = sort_by, order = order)
 
 @views.route('/search', methods = ['POST', 'GET'])
 @login_required
 def search():
+    cursor.execute('SELECT * FROM playlists WHERE user_id = ? AND entry = 1', (current_user.user_id,))
+    playlists = cursor.fetchall()
+
+    if request.args.get('search_in'):
+        search_by = request.args.get('search_by')
+        search_in = request.args.get('search_in')
+        order = request.args.get('order')
+        cursor.execute(f"""SELECT author, title, username, location, id, genre FROM songs
+                        WHERE {search_in} LIKE ? ORDER BY {search_in} {order}""", (search_by, ))
+        songs = cursor.fetchall()
+        return render_template("search.html", user = current_user, songs = songs, playlists = playlists, 
+                                search_by = search_by,sort_by = search_in, order = order)
+
     if request.method == 'POST':
         search_by = f'%{request.form['search_by']}%'
         cursor.execute("""SELECT author, title, username, location, id, genre FROM songs 
                        WHERE  title LIKE ? OR author LIKE ? OR username LIKE ? OR genre LIKE ?""", 
                        (search_by, search_by, search_by, search_by, ))
-        songs = cursor.fetchall()
-        cursor.execute('SELECT * FROM playlists WHERE user_id = ? AND entry = 1', (current_user.user_id,))
-        playlists = cursor.fetchall()
+        songs = cursor.fetchall()    
         
         return render_template("search.html", user = current_user, songs = songs, playlists = playlists, 
-                                search_by = search_by)
+                                search_by = search_by, sort_by = 'title', order = 'asc')
     
 @views.route('/search/<sort_by>/<order>')
 @login_required
 def search_sort(sort_by, order):
     search_by = request.args.get('search_by')
+    
+    if not sort_by:
+        sort_by = 'title'
+    if not order:
+        order = 'asc'
+
     cursor.execute(f"""SELECT author, title, username, location, id, genre FROM songs 
                    WHERE  title LIKE ? OR author LIKE ? OR username LIKE ? OR genre LIKE ?
                    ORDER BY {sort_by} {order}""", (search_by, search_by, search_by, search_by, ))
@@ -104,15 +117,9 @@ def add_song():
             filename = secure_filename(file.filename)
             file.save(path.join(app.config['UPLOAD_FOLDER'], filename))
 
-            # add a duplicate verification
-
             cursor.execute("""INSERT INTO songs (title, location, author, genre, description, username, user_id) 
                             VALUES (?, ?, ?, ?, ?, ?, ?)""", (title, filename, author, genre, description, user, user_id))
             db.commit()
-
-            # new_song = Songs(data = filename, user_id = current_user.id)
-            # db.session.add(new_song)
-            # db.session.commit()
 
             return redirect(url_for('views.home', name=filename))
 

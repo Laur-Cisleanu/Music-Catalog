@@ -7,12 +7,6 @@ from flask_login import UserMixin
 
 engine = create_engine('sqlite:///D:\Python\Projects\Music-Catalog\library.db', echo=True)
 Base = declarative_base()
-
-#class Songs(db.Model):
-#   id = db.Column(db.Integer, primary_key = True)
-#   data = db.Column(db.String(10000))
-#   user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-
 class Users(Base, UserMixin):
     __tablename__ = 'users'
     user_id = Column(Integer, primary_key = True)

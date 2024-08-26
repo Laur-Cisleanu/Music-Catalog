@@ -2,16 +2,19 @@
 {% block title %}Changed{% endblock %}
 
 {%block content %}
-{% if not sort_by and not order %}
-<h1 align="center">Welcome {{ current_user.username }}!</h1>
+<h1 align="center">Songs</h1>
 <br />
-{% else %}
-<h1 align="center">ooga</h1>
-{% endif %}
-
-<div class="main-content">
-    <div class="central-view">
-        <h2 align="center">These are the latest user added songs!</h2>
+<div class="main-content-edit">    
+    <p>
+        sorting in
+        {% if order == 'desc' %}
+        <a href="{{ url_for('views.sort', sort_by = sort_by, order = 'asc') }}">descending</a>
+        {% else %}
+        <a href="{{ url_for('views.sort', sort_by = sort_by, order = 'desc') }}">ascending</a>
+        {% endif %}
+        order
+    </p>
+    <div class="central-view">    
         <table align="center" class="home-table">
             <tr>
                 <th><a href="{{ url_for('views.sort', sort_by = 'author', order = 'desc') }}">Author</a></th>
@@ -21,10 +24,10 @@
                 <th>Play!</th>
                 <th></th>
             </tr>
-            {% for song in songs[:8] %}
+            {% for song in songs %}
             <tr>
                 <td>{{ song[0] }}</td>
-                <td><a href="{{ url_for('views.view_song', id = song[4]) }}">{{ song[1] }}</a></td>
+                <td>{{ song[1] }}</td>
                 <td>{{ song[5] }}</td>
                 <td>{{ song[2] }}</td>
                 <td>
@@ -60,28 +63,9 @@
             </tr>
             {% endfor %}
         </table>
-        <a href="{{ url_for('views.add_song') }}">Add Song</a>
-    </div>
-    <div class="sidebar">
-        <div class="sidebar-window">
-            <h2>Here's some of the recent playlists:</h3>
-            {% for i in range(list_index) %}
-                <p class="playlist-homeview">{{ i+1 }} - <a href="{{ url_for('views.view_playlist', playlist_id = playlist_view[i][1]) }}">{{ playlist_view[i][2] }}</a>  -  made by {{ playlist_view[i][4] }}</p>
-            {% endfor %}
-            <p class="playlist-homeview-last">8 - <a>{{ playlist_view[7][2] }}</a>  -  made by {{ playlist_view[7][4] }}</p>
-        </div>
-
-        <div class="sidebar-window-2">
-            <h2>Genres:</h2>
-            <ul class="sidebar-genres">
-                {% for i in range(genres_len) %}
-                    &bull; <a href="{{ url_for('views.search', search_by = genres[i][0], search_in = 'genre', order = 'asc') }}"> {{ genres[i][0] }}</a></li>
-                    {% if i%4 == 3 %}
-                        <br />
-                    {% endif %}    
-                {% endfor %}
-            </ul>
-        </div>
+        <p align="right">
+            <a href="{{ url_for('views.add_song') }}">Add Song</a>
+        </p>
     </div>
 </div>
 {% endblock %}

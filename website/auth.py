@@ -14,10 +14,6 @@ def login():
         email = request.form.get('email')
         password = request.form.get('password')
 
-        #cursor.execute('SELECT * FROM users WHERE email = ?', (email, ))
-        #user = cursor.fetchone()
-        #user = Users.query.filter_by(email=email).first()
-
         fetch_user = session.query(Users).filter_by(email = email).first()
 
         if fetch_user:
@@ -72,11 +68,8 @@ def sign_up():
             
             cursor.execute('SELECT user_id FROM users WHERE email = ?', (email,))
             user_id = cursor.fetchone()
-            #user_auth = session.query(Users).filter_by(email=email).first()
             user_auth = session.query(Users).filter_by(email = email).first()
-            #new_user = Users(email = email, username = username, password = generate_password_hash(password1, method = 'pbkdf2:sha256'))
-            #db.session.add(new_user)
-            #db.session.commit()
+
             login_user(user_auth, remember = True)
             flash('Account created!', category = 'success')
             return redirect(url_for('views.home'))

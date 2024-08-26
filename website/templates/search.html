@@ -4,14 +4,23 @@
 {%block content %}
 <h1>Searching</h1>
 <br />
-<div class="main-content">    
+<div class="main-content-edit">    
+    <p>
+        sorting in
+        {% if order == 'desc' %}
+        <a href="{{ url_for('views.search_sort', sort_by = sort_by, order = 'asc', search_by = search_by) }}">descending</a>
+        {% else %}
+        <a href="{{ url_for('views.search_sort', sort_by = sort_by, order = 'desc', search_by = search_by) }}">ascending</a>
+        {% endif %}
+        order
+    </p>
     <div class="central-view">    
-        <table>
+        <table class="home-table">
             <tr>
-                <th><a href="{{ url_for('views.search_sort', sort_by = 'author', order = 'desc', search_by = search_by) }}">Author</a></th>
-                <th><a href="{{ url_for('views.search_sort', sort_by = 'title', order = 'desc', search_by = search_by) }}">Title</a></th>
-                <th><a href="{{ url_for('views.search_sort', sort_by = 'genre', order = 'desc', search_by = search_by) }}">Genre</a></th>
-                <th><a href="{{ url_for('views.search_sort', sort_by = 'username', order = 'desc', search_by = search_by) }}">Added by</a></th>
+                <th><a href="{{ url_for('views.search_sort', sort_by = 'author', order = order, search_by = search_by) }}">Author</a></th>
+                <th><a href="{{ url_for('views.search_sort', sort_by = 'title', order = order, search_by = search_by) }}">Title</a></th>
+                <th><a href="{{ url_for('views.search_sort', sort_by = 'genre', order = order, search_by = search_by) }}">Genre</a></th>
+                <th><a href="{{ url_for('views.search_sort', sort_by = 'username', order = order, search_by = search_by) }}">Added by</a></th>
                 <th>Play!</th>
                 <th></th>
             </tr>

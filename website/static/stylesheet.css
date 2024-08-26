@@ -5,6 +5,7 @@ body {
     color: #f1f1f1; 
     margin: 0;
     padding: 0;
+    margin-bottom: 100px;
 }
 
 
@@ -30,6 +31,9 @@ body {
     padding: 1em;
     margin: 100px;
     border-radius: 10px;
+    justify-content: center;
+    align-items: center;
+    
 }
 
 
@@ -40,6 +44,8 @@ body {
     background-color: #333; 
     padding: 1em;
     border-radius: 10px;
+    justify-content: center;
+    align-items: center;
 }
 .central-view h2, .sidebar-window h2{
     margin-top: 0;
@@ -54,11 +60,21 @@ body {
     justify-content: space-between;
 }
 
-.sidebar-window {
+.sidebar-window, .sidebar-window-2 {
     background-color: #333; /* Slightly lighter than the background */
     padding: 1em;
     border-radius: 10px;
     margin-bottom: 1em; /* Space between the two windows */
+}
+.sidebar-window-2 {
+    height: 230px;
+    max-height: 235px;
+}
+
+.sidebar-genres {
+    font-size: 20px;
+    padding: 10px;
+    display: inline;
 }
 
 .playlist-homeview {
@@ -75,23 +91,24 @@ body {
 }
 
 /* Row and Cell Styles */
-table tr {
+
+.home-table tr {
     border-bottom: 20px solid #000000; 
 }
 
-table th, table td {
+.home-table th, .home-table td {
     padding: 12px 15px; 
     border-radius: 10px;
     color: #f1f1f1;
     text-align: left;
 }
 
-table td, table th {
+.home-table td, .home-table th {
     padding: 5px 15px; 
     text-align: center;
     border: 2px solid #2b2a2a;
 }
-table td:last-child, table th:last-child {
+.home-table td:last-child, .home-table th:last-child {
     border: none;
 }
 
