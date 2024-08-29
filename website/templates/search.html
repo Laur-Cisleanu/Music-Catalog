@@ -2,20 +2,23 @@
 {% block title %}Changed{% endblock %}
 
 {%block content %}
-<h1>Searching</h1>
+<h1 class="screen-title" align="center">Searching</h1>
 <br />
+
 <div class="main-content-edit">    
-    <p>
-        sorting in
-        {% if order == 'desc' %}
-        <a href="{{ url_for('views.search_sort', sort_by = sort_by, order = 'asc', search_by = search_by) }}">descending</a>
-        {% else %}
-        <a href="{{ url_for('views.search_sort', sort_by = sort_by, order = 'desc', search_by = search_by) }}">ascending</a>
-        {% endif %}
-        order
-    </p>
-    <div class="central-view">    
-        <table class="home-table">
+    <h2>Songs:</h2>
+
+    <div class="central-view">
+        <p align="left">
+            sorting in
+            {% if order == 'desc' %}
+            <a href="{{ url_for('views.search_sort', sort_by = sort_by, order = 'asc', search_by = search_by) }}">descending</a>
+            {% else %}
+            <a href="{{ url_for('views.search_sort', sort_by = sort_by, order = 'desc', search_by = search_by) }}">ascending</a>
+            {% endif %}
+            order
+        </p>
+        <table align="center" class="home-table">
             <tr>
                 <th><a href="{{ url_for('views.search_sort', sort_by = 'author', order = order, search_by = search_by) }}">Author</a></th>
                 <th><a href="{{ url_for('views.search_sort', sort_by = 'title', order = order, search_by = search_by) }}">Title</a></th>
@@ -23,7 +26,9 @@
                 <th><a href="{{ url_for('views.search_sort', sort_by = 'username', order = order, search_by = search_by) }}">Added by</a></th>
                 <th>Play!</th>
                 <th></th>
+                <th></th>
             </tr>
+
             {% for song in songs %}
             <tr>
                 <td>{{ song[0] }}</td>
@@ -39,15 +44,19 @@
                 <td>
                     <div class="dropdown">
                         <button class="dropbtn">Options</button>
+
                         <div class="dropdown-content">
                             <a href="{{ url_for('views.view_song', id = song[4]) }}">View</a>
                             <a   href="{{ url_for('views.edit_song', id = song[4]) }}">Edit</a>
+
                             <div class="dropdown-secondary">
                                 <button>Add to playlist</button>
+
                                 <div class="dropdown-secondary-content">
                                     {% for playlist in playlists %}
                                     <a href="{{ url_for('views.add_to_playlist', playlist_id = playlist[1], song_id = song[4]) }}">{{ playlist[2] }}</a>
                                     {% endfor %}
+                                    
                                     <form class="PL-form" action="{{ url_for('views.create_playlist', song_id = song[4]) }}" method="POST">
                                         <div>
                                             <input class="PL-form" type="text" id="name" name="name" placeholder="Type and press Enter" />
@@ -63,7 +72,10 @@
             </tr>
             {% endfor %}
         </table>
-        <a href="{{ url_for('views.add_song') }}">Add Song</a>
+        
+        <p align="right">
+            <a href="{{ url_for('views.add_song') }}">Add Song</a>
+        </p>
     </div>
 </div>
 {% endblock %}

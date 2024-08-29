@@ -2,7 +2,7 @@
 {% block title %}Changed{% endblock %}
 
 {%block content %}
-<h1 align="center">Songs</h1>
+<h1 class="screen-title" align="center">Songs</h1>
 <br />
 <div class="main-content-edit">    
     <p>
@@ -14,20 +14,22 @@
         {% endif %}
         order
     </p>
+
     <div class="central-view">    
         <table align="center" class="home-table">
             <tr>
-                <th><a href="{{ url_for('views.sort', sort_by = 'author', order = 'desc') }}">Author</a></th>
                 <th><a href="{{ url_for('views.sort', sort_by = 'title', order = 'desc') }}">Title</a></th>
+                <th><a href="{{ url_for('views.sort', sort_by = 'author', order = 'desc') }}">Author</a></th>
                 <th><a href="{{ url_for('views.sort', sort_by = 'genre', order = 'desc') }}">Genre</a></th>
                 <th><a href="{{ url_for('views.sort', sort_by = 'username', order = 'desc') }}">Added by</a></th>
                 <th>Play!</th>
                 <th></th>
+                <th></th>
             </tr>
             {% for song in songs %}
             <tr>
-                <td>{{ song[0] }}</td>
                 <td>{{ song[1] }}</td>
+                <td>{{ song[0] }}</td>
                 <td>{{ song[5] }}</td>
                 <td>{{ song[2] }}</td>
                 <td>

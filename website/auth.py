@@ -23,8 +23,10 @@ def login():
                 return redirect(url_for('views.home')) 
             else:
                 flash('Incorrect password, try again.', category = 'error')
+                return redirect(url_for('auth.login')) 
         else:
             flash('User does not exist.', category = 'error')
+            return redirect(url_for('auth.login')) 
 
     return render_template("login.html", user = current_user)
 

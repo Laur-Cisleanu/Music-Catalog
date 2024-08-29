@@ -9,7 +9,6 @@ from .utils import allowed_file
 views = Blueprint('views', __name__)
 
 UPLOAD_FOLDER = r'D:\Python\Projects\Music-Catalog\website\static\uploads'
-ALLOWED_EXTENSIONS = {'mp3', 'mp4'}
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -39,6 +38,11 @@ def home():
 @views.route('/sort/<sort_by>/<order>')
 @login_required
 def sort(sort_by, order):
+    if not sort_by:
+        sort_by = 'title'
+    if not order:
+        order = 'asc'
+
     cursor.execute(f'SELECT author, title, username, location, id, genre FROM songs ORDER BY {sort_by} {order}')
     songs = cursor.fetchall()
     cursor.execute('SELECT * FROM playlists WHERE user_id = ? AND entry = 1', (current_user.user_id,))

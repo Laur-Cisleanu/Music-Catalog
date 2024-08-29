@@ -1,17 +1,27 @@
 /* General body styles */
 body {
     font-family: Arial, sans-serif;
-    background-color: #1c1c1c; 
+    background-color: #1c1c1c transparent; 
     color: #f1f1f1; 
     margin: 0;
     padding: 0;
     margin-bottom: 100px;
 }
 
+body {
+    background-image: url('marcela-laskoski-YrtFlrLo2DQ-unsplash.jpg');
+    background-attachment: fixed;
+    background-size: cover; /* Ensure the image covers the entire page */
+    background-repeat: no-repeat; /* Prevent the image from repeating */
+    background-position: center;
+}
 
+.screen-title {
+    padding-top: 100px;
+}
 
 /* Central content layout with sidebar */
-.main-content, .main-content-edit {
+.main-content, .main-content-edit, .main-content-auth {
     display: flex;
     max-width: 100%;
     margin: 2em auto;
@@ -21,27 +31,53 @@ body {
 }
 .main-content-edit {
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin: 50px;
+}
+.main-content-edit table {
+    padding: 1em;
+    padding-left: 100px;
+    padding-right: 100px;
+}
+.main-content-auth {
+    width: auto;
+    max-width: 20%;
+    flex-direction: column;
     margin: 2em 2em auto;
+    margin: auto;
+    padding: 40px;
+    margin-top: 100px;
+    justify-content: center;
+    align-items: center;
 }
 
-.auth-view, .central-view-edit {
+.central-view-edit {
     flex: 2; /* Take up twice the space compared to the sidebar */
     margin-right: 1em; /* Space between central view and sidebar */
-    background-color: #333;
+    background: linear-gradient(to top, #261544, #47277E);
     padding: 1em;
     margin: 100px;
     border-radius: 10px;
     justify-content: center;
     align-items: center;
-    
 }
 
+.auth-view {
+    flex: 2; /* Take up twice the space compared to the sidebar */
+    margin-right: 1em; /* Space between central view and sidebar */
+    background: linear-gradient(to top, #261544, #47277E);
+    padding: 1em;
+    border-radius: 10px;
+    text-align: center;
+}
 
 .central-view {
     flex: 2; 
     margin-right: 1em; 
     margin: 1em;
-    background-color: #333; 
+    background: linear-gradient(to top, #261544, #47277E); 
     padding: 1em;
     border-radius: 10px;
     justify-content: center;
@@ -61,7 +97,7 @@ body {
 }
 
 .sidebar-window, .sidebar-window-2 {
-    background-color: #333; /* Slightly lighter than the background */
+    background: linear-gradient(to top, #261544, #47277E); /* Slightly lighter than the background */
     padding: 1em;
     border-radius: 10px;
     margin-bottom: 1em; /* Space between the two windows */
@@ -96,17 +132,27 @@ body {
     border-bottom: 20px solid #000000; 
 }
 
-.home-table th, .home-table td {
+
+.home-table td, .home-table td a {
     padding: 12px 15px; 
     border-radius: 10px;
     color: #f1f1f1;
     text-align: left;
 }
 
-.home-table td, .home-table th {
+.home-table td {
     padding: 5px 15px; 
     text-align: center;
-    border: 2px solid #2b2a2a;
+    border: 2px solid transparent;
+}
+.home-table th {
+    padding: 12px 15px; 
+    color: #c0c0c0;
+    text-align: center;
+    border-bottom: 2px solid #12002e;
+}
+.home-table th a{
+    color: #c0c0c0;
 }
 .home-table td:last-child, .home-table th:last-child {
     border: none;
@@ -114,9 +160,13 @@ body {
 
 /* Navigation bar styles */
 .home-nav {
-    background-color: #333;
+    background-color: #281644;
     padding: 1em;
-    position: relative;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
 }
 
 .home-nav-div {
@@ -124,6 +174,7 @@ body {
     justify-content: flex-end;
     transition: max-height 0.3s ease-out;
     overflow: hidden;
+    padding-right: 20px;
 }
 
 .home-nav-a {
@@ -137,7 +188,7 @@ body {
 }
 
 .home-nav-a:hover {
-    background-color: #555;
+    background-color: #331b5c;
 }
 
 nav button {
@@ -153,7 +204,7 @@ nav button {
 }
 
 nav button:hover {
-    background-color: #666; 
+    background-color: #685094; 
 }
 
 nav div {
@@ -162,28 +213,29 @@ nav div {
 
 .searchbar {
     color: #f1f1f1;
-    background-color: #333;
+    background-color: #281644;
     height: 20px;
     margin-bottom: 0;
     padding-bottom: 0;
     border-top: none;
     border-left: none;
     border-right: none;
+    border-color: #000000;
 }
 .searchbar::placeholder{
     color: #d8d8d8;
 }
 
 footer {
-    background-color: #333; /* Dark background */
-    color: #f1f1f1; /* Light text color */
-    padding: 1em 0; /* Padding for top/bottom and left/right */
-    text-align: center; /* Center-align text */
-    font-size: 1em; /* Default font size */
-    position: fixed; /* Fixed position */
-    bottom: 0; /* Align to the bottom of the viewport */
-    width: 100%; /* Full width */
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3); /* Subtle shadow */
+    background-color: #281644;
+    color: #f1f1f1; 
+    padding: 1em 0; 
+    text-align: center;
+    font-size: 1em;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
 }
 
 /* Alert message styles */
@@ -192,6 +244,7 @@ footer {
     padding: 1em;
     border-radius: 5px;
     font-weight: bold;
+    transform: translateY(50px);
 }
 
 .alert-danger {
@@ -199,9 +252,12 @@ footer {
     color: #fff;
 }
 
-.alert-success {
-    background-color: #5cb85c; /* Green background for success */
-    color: #fff;
+.success {
+    margin: 1em 0;
+    padding: 1em;
+    border-radius: 5px;
+    font-weight: bold;
+    transform: translateY(50px);
 }
 
 .alert .close {
@@ -217,12 +273,12 @@ footer {
 }
 
 /* Links within the content */
-.auth-view a, .central-view a, .sidebar-window a {
+.sidebar a {
     color: #9acd32; /* Light green links */
     text-decoration: none;
 }
 
-.central-view a:hover, .sidebar-window a:hover {
+.central-view a:hover, .sidebar a:hover {
     text-decoration: underline;
 }
 
@@ -252,9 +308,21 @@ footer {
 }
 
 .dropbtn {
-    background-color: #4CAF50;
-    color: white;
+    background-color: #00D12D;
+    color: rgb(0, 0, 0);
     padding: 10px;
+    padding-bottom: 7px;
+    font-size: 16px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+.addSongbtn {
+    background-color: #00D12D;
+    color: rgb(0, 0, 0);
+    padding: 9px;
+    padding-bottom: 7px;
+    padding-top: 20px;
     font-size: 16px;
     border: none;
     border-radius: 10px;
@@ -265,11 +333,15 @@ footer {
 .dropdown-content {
     display: none;
     position: absolute;
-    background-color: #f9f9f9;
+    background-color: rgb(179, 152, 255);
     min-width: 160px;
     border-radius: 10px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
+}
+
+.central-view table div a {
+    color: #000;
 }
 
 .dropdown-content button {
@@ -346,4 +418,33 @@ footer {
     margin: 0;
     border: 0px solid #ccc;
     border-radius: 4px;
+}
+
+.alert {
+    padding: 20px;
+    background-color: #880000; /* Green */
+    color: white;
+    margin-bottom: 15px;
+}
+.success {
+    padding: 20px;
+    font-weight: bold;
+    background-color: #15b100; /* Green */
+    color: white;
+    margin-bottom: 15px;
+}
+
+.closebtn {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.closebtn:hover {
+    color: black;
 }

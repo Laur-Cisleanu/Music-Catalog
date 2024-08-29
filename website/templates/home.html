@@ -3,7 +3,7 @@
 
 {%block content %}
 {% if not sort_by and not order %}
-<h1 align="center">Welcome {{ current_user.username }}!</h1>
+<h1 class="screen-title" align="center">Welcome {{ current_user.username }}!</h1>
 <br />
 {% else %}
 <h1 align="center">ooga</h1>
@@ -14,17 +14,19 @@
         <h2 align="center">These are the latest user added songs!</h2>
         <table align="center" class="home-table">
             <tr>
-                <th><a href="{{ url_for('views.sort', sort_by = 'author', order = 'desc') }}">Author</a></th>
                 <th><a href="{{ url_for('views.sort', sort_by = 'title', order = 'desc') }}">Title</a></th>
+                <th><a href="{{ url_for('views.sort', sort_by = 'author', order = 'desc') }}">Author</a></th>
                 <th><a href="{{ url_for('views.sort', sort_by = 'genre', order = 'desc') }}">Genre</a></th>
                 <th><a href="{{ url_for('views.sort', sort_by = 'username', order = 'desc') }}">Added by</a></th>
                 <th>Play!</th>
                 <th></th>
+                <th></th>
             </tr>
+
             {% for song in songs[:8] %}
             <tr>
-                <td>{{ song[0] }}</td>
                 <td><a href="{{ url_for('views.view_song', id = song[4]) }}">{{ song[1] }}</a></td>
+                <td>{{ song[0] }}</td>
                 <td>{{ song[5] }}</td>
                 <td>{{ song[2] }}</td>
                 <td>
@@ -33,9 +35,10 @@
                             Your browser does not support the audio element.
                     </audio>
                 </td>
+
                 <td>
                     <div class="dropdown">
-                        <button class="dropbtn">Options</button>
+                        <button class="dropbtn"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M6 12c0 1.657-1.343 3-3 3s-3-1.343-3-3 1.343-3 3-3 3 1.343 3 3zm9 0c0 1.657-1.343 3-3 3s-3-1.343-3-3 1.343-3 3-3 3 1.343 3 3zm9 0c0 1.657-1.343 3-3 3s-3-1.343-3-3 1.343-3 3-3 3 1.343 3 3z"/></svg></button>
                         <div class="dropdown-content">
                             <a href="{{ url_for('views.view_song', id = song[4]) }}">View</a>
                             <a   href="{{ url_for('views.edit_song', id = song[4]) }}">Edit</a>
@@ -60,8 +63,12 @@
             </tr>
             {% endfor %}
         </table>
-        <a href="{{ url_for('views.add_song') }}">Add Song</a>
+
+        <div align="right">
+            <a class="addSongbtn" href="{{ url_for('views.add_song') }}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm6 13h-5v5h-2v-5h-5v-2h5v-5h2v5h5v2z"/></svg></a>
+        </div>
     </div>
+
     <div class="sidebar">
         <div class="sidebar-window">
             <h2>Here's some of the recent playlists:</h3>
