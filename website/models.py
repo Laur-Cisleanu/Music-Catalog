@@ -15,7 +15,7 @@ class Users(Base, UserMixin):
     password = Column(String(1000))
     admin = Column(Integer)
     user_description = Column(Text)
-    profile_picture = Column(Text)
+    profile_picture = Column(String(1000))
 
     def __init__(self, user_id, email, username, password, admin, user_description, profile_picture):
         self.user_id = user_id

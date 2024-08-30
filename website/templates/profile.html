@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+
+
+<div class="profile-content">
+    <div class="profile">
+        {% if user_info[6] %}
+        <img src="{{ url_for('static', filename = 'uploads/' + user_info[6]) }}" alt="Profile Photo" class="profile-photo">
+        {% endif %}
+        <h1 align="center">{{ user_info[2] }}</h1>
+        <a class="submitbtn" href="{{ url_for('views.edit_profile', user_id = user_info[0]) }}">Edit profile</a>
+    </div>
+    <div class="profile-view">
+        <h2 align="center">Description</h2>
+        <p class="user-description">{{ user_info[5] }}</p>
+        <br />
+
+        <div class="tables-flex">
+            <h2>Songs added by {{ user_info[2] }}</h2>
+            <h2>Playlists created by {{ user_info[2] }}</h2>
+        </div>
+        
+        <div class="tables-flex">
+        
+                
+            <table align="center" class="profile-table">
+                <tr>
+                    <th>#</th>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Genre</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                {% for song in user_songs_info %}
+                <tr>
+                    <td>{{ song[0] }}</td>
+                    <td>{{ song[1] }}</td>
+                    <td>{{ song[3] }}</td>
+                    <td>{{ song[4] }}</td>
+                    <td>
+                        <div class="dropdown">
+                            <button class="dropbtn"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M6 12c0 1.657-1.343 3-3 3s-3-1.343-3-3 1.343-3 3-3 3 1.343 3 3zm9 0c0 1.657-1.343 3-3 3s-3-1.343-3-3 1.343-3 3-3 3 1.343 3 3zm9 0c0 1.657-1.343 3-3 3s-3-1.343-3-3 1.343-3 3-3 3 1.343 3 3z"/></svg></button>
+                            <div class="dropdown-content">
+                                <a class="drop-a" href="{{ url_for('views.view_song', id = song[0]) }}">View</a>
+                                <a class="drop-a" href="{{ url_for('views.edit_song', id = song[0]) }}">Edit</a>
+                                <div class="dropdown-secondary">
+                                    <button>Add to playlist</button>
+                                    <div class="dropdown-secondary-content">
+                                        {% for playlist in playlists %}
+                                        <a href="{{ url_for('views.add_to_playlist', playlist_id = playlist[1], song_id = song[0]) }}">{{ playlist[2] }}</a>
+                                        {% endfor %}
+                                        <form class="PL-form" action="{{ url_for('views.create_playlist', song_id = song[0]) }}" method="POST">
+                                            <div>
+                                                <input class="PL-form" type="text" id="name" name="name" placeholder="Type and press Enter" />
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <a class="drop-a" href="{{ url_for('views.delete_song', id = song[0]) }}">Delete</a>
+                            </div>
+                        </div>
+                    </td>
+                    <td></td>
+                </tr>
+                {% endfor %}
+            </table>
+            
+            <br />
+            
+        
+                
+            <table align="center" class="profile-table">
+                <tr>
+                    <th>#</th>
+                    <th>name</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                {% for i in playlist_count %}
+                <tr>
+                    <td>{{ i+1 }}</td>
+                    <td><a href="{{ url_for('views.view_playlist', playlist_id = user_playlists_info[i][1]) }}">{{ user_playlists_info[i][2] }}</a></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                {% endfor %}
+            </table>
+            
+        </div>
+    </div>
+</div>
+{% endblock %}

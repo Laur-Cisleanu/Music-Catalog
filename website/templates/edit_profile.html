@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}Edit profile{% endblock %}
+
+{% block content %}
+<h1 class="screen-title" align="center">Edit your profile</h1>
+
+<div class="main-content-edit">
+
+    <form method="POST" enctype=multipart/form-data>
+        <div class="central-view-edit">
+            <div class="playlist-edit">
+                <label for="username">Username</label>
+                <br />
+                <input type="text" 
+                class="form-control" 
+                id="username" 
+                name="username" 
+                placeholder="Enter your username"
+                value="{{ user_info[2] }}"/>
+            </div>
+
+            <div class="playlist-edit">
+                <label for="profile_picture">Add your profile picture</label>
+                <br />
+                <input type="file" 
+                class="form-control" 
+                id="profile_picture" 
+                name="profile_picture" 
+                placeholder="Add your profile picture"/>
+            </div>
+
+            <textarea id="description" name="description">{{ user_info[5] }}</textarea>
+            <br />
+            <button class="submitbtn" type="submit" class="btn btn-primary">Update</button>
+        </div> 
+    </form>
+</div>
+{% endblock %}

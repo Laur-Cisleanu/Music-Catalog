@@ -11,9 +11,9 @@
         <p align="left">
             sorting in
             {% if order == 'desc' %}
-            <a href="{{ url_for('views.sort', sort_by = sort_by, order = 'asc') }}">descending</a>
+            <a class="redirect-auth" href="{{ url_for('views.sort', sort_by = sort_by, order = 'asc') }}">descending</a>
             {% else %}
-            <a href="{{ url_for('views.sort', sort_by = sort_by, order = 'desc') }}">ascending</a>
+            <a class="redirect-auth" href="{{ url_for('views.sort', sort_by = sort_by, order = 'desc') }}">ascending</a>
             {% endif %}
             order
         </p>
@@ -61,7 +61,6 @@
                                 </div>
                             </div>
                             <a class="drop-a" href="{{ url_for('views.delete_song', id = song[4]) }}">Delete</a>
-                            <button onclick="">Share</button>
                         </div>
                     </div>
                 </td>

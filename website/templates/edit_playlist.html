@@ -53,8 +53,8 @@
         <table class="songs-table">
             <tr>
                 <th>Order</th>
-                <th>Author</th>
                 <th>Title</th>
+                <th>Author</th>
                 <th>Genre</th>
                 <th>Added by</th>
                 <th></th>
@@ -62,8 +62,8 @@
             {% for song in playlist %}
             <tr>
                 <td>{{ song[16] }}</td>
-                <td>{{ song[3] }}</td>
                 <td>{{ song[1] }}</td>
+                <td>{{ song[3] }}</td>
                 <td>{{ song[4] }}</td>
                 <td>{{ song[7] }}</td>
                 <td><a class="submitbtn" href="{{ url_for('views.delete_playlist', playlist_id = playlist[0][9], song_entry = song[16]) }}">

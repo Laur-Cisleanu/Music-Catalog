@@ -29,10 +29,13 @@ def home():
     if list_index > 7:
         list_index = 7
 
+    cursor.execute('SELECT * FROM users WHERE user_id = ?', (current_user.user_id, ))
+    user_info = cursor.fetchone()
+
     cursor.execute('SELECT DISTINCT genre FROM songs')
     genres = cursor.fetchall()
     genres_len = len(genres)
-    return render_template("home.html", user = current_user, songs = songs, playlists = playlists, 
+    return render_template("home.html", user = current_user, songs = songs, playlists = playlists, user_info = user_info,
                            playlist_view = playlist_view, list_index = list_index, genres = genres, genres_len = genres_len)
 
 @views.route('/sort/<sort_by>/<order>')
@@ -43,19 +46,25 @@ def sort(sort_by, order):
     if not order:
         order = 'asc'
 
+    cursor.execute('SELECT * FROM users WHERE user_id = ?', (current_user.user_id, ))
+    user_info = cursor.fetchone()
+
     cursor.execute(f'SELECT author, title, username, location, id, genre FROM songs ORDER BY {sort_by} {order}')
     songs = cursor.fetchall()
     cursor.execute('SELECT * FROM playlists WHERE user_id = ? AND entry = 1', (current_user.user_id,))
     playlists = cursor.fetchall()
 
     return render_template("songs.html", user = current_user, songs = songs, playlists = playlists, 
-                            sort_by = sort_by, order = order)
+                            sort_by = sort_by, order = order, user_info = user_info)
 
 @views.route('/search', methods = ['POST', 'GET'])
 @login_required
 def search():
     cursor.execute('SELECT * FROM playlists WHERE user_id = ? AND entry = 1', (current_user.user_id,))
     playlists = cursor.fetchall()
+
+    cursor.execute('SELECT * FROM users WHERE user_id = ?', (current_user.user_id, ))
+    user_info = cursor.fetchone()
 
     if request.args.get('search_in'):
         search_by = request.args.get('search_by')
@@ -65,7 +74,7 @@ def search():
                         WHERE {search_in} LIKE ? ORDER BY {search_in} {order}""", (search_by, ))
         songs = cursor.fetchall()
         return render_template("search.html", user = current_user, songs = songs, playlists = playlists, 
-                                search_by = search_by,sort_by = search_in, order = order)
+                                search_by = search_by,sort_by = search_in, order = order, user_info = user_info)
 
     if request.method == 'POST':
         search_by = f'%{request.form['search_by']}%'
@@ -75,7 +84,7 @@ def search():
         songs = cursor.fetchall()    
         
         return render_template("search.html", user = current_user, songs = songs, playlists = playlists, 
-                                search_by = search_by, sort_by = 'title', order = 'asc')
+                                search_by = search_by, sort_by = 'title', order = 'asc', user_info = user_info)
     
 @views.route('/search/<sort_by>/<order>')
 @login_required
@@ -87,6 +96,9 @@ def search_sort(sort_by, order):
     if not order:
         order = 'asc'
 
+    cursor.execute('SELECT * FROM users WHERE user_id = ?', (current_user.user_id, ))
+    user_info = cursor.fetchone()
+
     cursor.execute(f"""SELECT author, title, username, location, id, genre FROM songs 
                    WHERE  title LIKE ? OR author LIKE ? OR username LIKE ? OR genre LIKE ?
                    ORDER BY {sort_by} {order}""", (search_by, search_by, search_by, search_by, ))
@@ -94,11 +106,14 @@ def search_sort(sort_by, order):
     cursor.execute('SELECT * FROM playlists WHERE user_id = ? AND entry = 1', (current_user.user_id,))
     playlists = cursor.fetchall()
     return render_template("search.html", user = current_user, songs = songs, playlists = playlists, 
-                            search_by = search_by, sort_by = sort_by, order = order)
+                            search_by = search_by, sort_by = sort_by, order = order, user_info = user_info)
 
 @views.route('/add_song', methods = ['POST', 'GET'])
 @login_required
 def add_song():
+    cursor.execute('SELECT * FROM users WHERE user_id = ?', (current_user.user_id, ))
+    user_info = cursor.fetchone()
+
     if request.method == 'POST':
 
         author = request.form['author']
@@ -128,19 +143,25 @@ def add_song():
             flash('Song added with success!', category = 'success')
             return redirect(url_for('views.home', name=filename))
 
-    return render_template("add_song.html", user = current_user)
+    return render_template("add_song.html", user = current_user, user_info = user_info)
 
 @views.route('/view_song/<int:id>')
 @login_required
 def view_song(id):
+    cursor.execute('SELECT * FROM users WHERE user_id = ?', (current_user.user_id, ))
+    user_info = cursor.fetchone()
+
     cursor.execute('SELECT * FROM songs WHERE id = ?', (id, ))
     song = cursor.fetchone()
 
-    return render_template('view_song.html', user = current_user, song = song)
+    return render_template('view_song.html', user = current_user, song = song, user_info = user_info)
 
 @views.route('/edit_song/<int:id>', methods=['GET', 'POST'])
 @login_required
 def edit_song(id):
+    cursor.execute('SELECT * FROM users WHERE user_id = ?', (current_user.user_id, ))
+    user_info = cursor.fetchone()
+
     cursor.execute('SELECT * FROM songs WHERE id = ?', (id, ))
     song = cursor.fetchone()
     user_id = song[6]
@@ -158,7 +179,7 @@ def edit_song(id):
             flash('Song has been updated successfully!', category = 'success')
             return redirect(url_for('views.home'))
         
-        return render_template("edit_song.html", user = current_user, song = song)
+        return render_template("edit_song.html", user = current_user, song = song, user_info = user_info)
     else:
         flash('You don\'t have access', category = 'error')
     return redirect(url_for('views.home'))
@@ -166,6 +187,9 @@ def edit_song(id):
 @views.route('/delete_song/<int:id>', methods=['GET', 'POST'])
 @login_required
 def delete_song(id):
+    cursor.execute('SELECT * FROM users WHERE user_id = ?', (current_user.user_id, ))
+    user_info = cursor.fetchone()
+
     cursor.execute('SELECT * FROM songs WHERE id = ?', (id, ))
     song = cursor.fetchone()
     user_id = song[6]
@@ -188,13 +212,19 @@ def delete_song(id):
 @views.route('/view_playlists')
 @login_required
 def view_playlists():
+    cursor.execute('SELECT * FROM users WHERE user_id = ?', (current_user.user_id, ))
+    user_info = cursor.fetchone()
+
     cursor.execute('SELECT * FROM playlists WHERE entry = 1')
     playlists = cursor.fetchall()
-    return render_template("view_playlists.html", user = current_user, playlists = playlists)
+    return render_template("view_playlists.html", user = current_user, playlists = playlists, user_info = user_info)
 
 @views.route('/create_playlist/<int:song_id>', methods = ['POST', 'GET'])
 @login_required
 def create_playlist(song_id):
+    cursor.execute('SELECT * FROM users WHERE user_id = ?', (current_user.user_id, ))
+    user_info = cursor.fetchone()
+
     if request.method == 'POST':
         cursor.execute('SELECT * FROM songs WHERE id = ?', (song_id,))
         song = cursor.fetchone()
@@ -217,6 +247,9 @@ def create_playlist(song_id):
 @views.route('/add_to_playlist/<int:playlist_id>/<int:song_id>')
 @login_required
 def add_to_playlist(playlist_id, song_id):
+    cursor.execute('SELECT * FROM users WHERE user_id = ?', (current_user.user_id, ))
+    user_info = cursor.fetchone()
+
     user_id = current_user.user_id
     cursor.execute('SELECT name, private FROM playlists WHERE playlist_id = ? AND user_id = ?',
                    (playlist_id, user_id))
@@ -241,6 +274,9 @@ def add_to_playlist(playlist_id, song_id):
 @views.route('/view_playlist/<int:playlist_id>')
 @login_required
 def view_playlist(playlist_id):
+    cursor.execute('SELECT * FROM users WHERE user_id = ?', (current_user.user_id, ))
+    user_info = cursor.fetchone()
+
     cursor.execute('SELECT author, title, username, song_id, entry, name FROM playlists WHERE playlist_id = ?',
                    (playlist_id,))
     songs = cursor.fetchall()
@@ -251,12 +287,15 @@ def view_playlist(playlist_id):
     cursor.execute('SELECT * FROM playlists WHERE user_id = ? AND entry = 1', (current_user.user_id,))
     playlists = cursor.fetchall()
 
-    return render_template("view_playlist.html", user = current_user, songs = songs, 
+    return render_template("view_playlist.html", user = current_user, songs = songs, user_info = user_info,
                            location = location[0], playlist_id = playlist_id, playlist_name = playlist_name, playlists = playlists)
 
 @views.route('edit_playlist/<int:playlist_id>', methods = ['POST', 'GET'])
 @login_required
 def edit_playlist(playlist_id):
+    cursor.execute('SELECT * FROM users WHERE user_id = ?', (current_user.user_id, ))
+    user_info = cursor.fetchone()
+
     cursor.execute('SELECT * FROM songs JOIN playlists ON songs.id = playlists.song_id WHERE playlists.playlist_id = ?', 
                    (playlist_id, ))
     playlist = cursor.fetchall()
@@ -275,11 +314,14 @@ def edit_playlist(playlist_id):
     else:
         flash('You don\'t have access', category = 'error')
         return redirect(url_for('views.view_playlist', playlist_id = playlist_id))
-    return render_template('edit_playlist.html', user = current_user, playlist = playlist)
+    return render_template('edit_playlist.html', user = current_user, playlist = playlist, user_info = user_info)
 
 @views.route('delete_playlist/<int:playlist_id>')
 @login_required
 def delete_playlist(playlist_id):
+    cursor.execute('SELECT * FROM users WHERE user_id = ?', (current_user.user_id, ))
+    user_info = cursor.fetchone()
+
     cursor.execute('SELECT * FROM playlists WHERE playlist_id = ?', (playlist_id, ))
     playlist = cursor.fetchall()
     user_id = playlist[0][3]
@@ -311,3 +353,67 @@ def delete_playlist(playlist_id):
     else:
         flash('You don\'t have access', category = 'error')
         return redirect(url_for('views.view_playlist', playlist_id = playlist_id))
+    
+@views.route('profile/<user_id>')
+@login_required
+def profile(user_id):
+    cursor.execute('SELECT * FROM users WHERE user_id = ?', (user_id, ))
+    user_info = cursor.fetchone()
+
+    cursor.execute('SELECT * FROM songs WHERE user_id = ?', (user_id, ))
+    user_songs_info = cursor.fetchall()
+
+    cursor.execute('SELECT * FROM playlists WHERE user_id = ? AND entry = 1', (user_id, ))
+    user_playlists_info = cursor.fetchall()
+
+    cursor.execute('SELECT COUNT(*) FROM playlists WHERE user_id = ? AND entry = 1', (user_id, ))
+    playlist_count = range(cursor.fetchone()[0])
+
+    cursor.execute('SELECT * FROM playlists WHERE user_id = ? AND entry = 1', (current_user.user_id,))
+    playlists = cursor.fetchall()
+
+    return render_template('profile.html', user = current_user, user_id = user_id, user_info = user_info,
+                           user_songs_info = user_songs_info, user_playlists_info = user_playlists_info, 
+                           playlist_count = playlist_count, playlists = playlists)
+
+@views.route('edit_profile/<user_id>', methods = ['GET', 'POST'])
+@login_required
+def edit_profile(user_id):
+    cursor.execute('SELECT * FROM users WHERE user_id = ?', (user_id, ))
+    user_info = cursor.fetchone()
+
+    if current_user.user_id == user_info[0] or current_user.admin == 1:
+        if request.method == 'POST':
+            if 'profile_picture' not in request.files:
+                flash('No file part', category = 'error')
+                return redirect(request.url)
+
+            username = request.form['username']
+            description = request.form['description']
+            file = request.files['profile_picture']
+
+            if file.filename == '':
+                flash('No selected file', category = 'error')
+                return redirect(request.url)
+
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                file.save(path.join(app.config['UPLOAD_FOLDER'], filename))  
+
+                cursor.execute('UPDATE users SET username = ?, user_description = ?, profile_picture = ? WHERE user_id = ?', 
+                               (username, description, filename, user_id))
+                db.commit()
+
+                flash('Profile updated successfully!', category = 'success')
+                return redirect(url_for('views.profile', user_id = user_id))
+            else:
+                flash('invalid photo/data', category = 'error')
+                return redirect(request.url)
+    
+    else:
+        flash('You don\'t have access', category = 'error')
+        return redirect(url_for('views.profile', user_id = user_id))
+        
+    return render_template('edit_profile.html', user = current_user, user_id = user_id, user_info = user_info)
+        
+    

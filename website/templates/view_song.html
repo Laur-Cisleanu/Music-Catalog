@@ -6,10 +6,6 @@
 
 <div class="main-content-edit">
     <h2>Song information:</h2>
-    <form>
-        <a href="{{ url_for('views.edit_song', id = song[0]) }}">Edit song</a>
-        <a href="{{ url_for('views.delete_song', id = song[0]) }}">Delete song</a>
-    </form>
     <div class="central-view">
         <table class="home-table">
             <tr>
@@ -33,6 +29,11 @@
             </tr>
         </table>
         <br />
+        <form>
+            <a class="submitbtn" href="{{ url_for('views.edit_song', id = song[0]) }}">Edit song</a>
+            <a class="submitbtn" href="{{ url_for('views.delete_song', id = song[0]) }}">Delete song</a>
+        </form>
+
         <h2>Description:</h2>
         <p>{{ song[5] }}</p>
     </div>

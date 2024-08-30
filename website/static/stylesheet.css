@@ -92,6 +92,9 @@ body {
 .central-view .playlist-edit {
     padding: 10px;
 }
+.central-view-edit .playlist-edit {
+    padding: 20px;
+}
 
 
 .sidebar {
@@ -146,10 +149,14 @@ body {
     text-align: left;
 }
 
-.home-table td , .songs-table td {
+.home-table td , .songs-table td, .home-table td a, .songs-table td a{
     padding: 5px 15px; 
     text-align: center;
     border: 2px solid transparent;
+    text-decoration: none;
+}
+.home-table td a:hover , .songs-table td a:hover {
+    text-decoration: underline;
 }
 
 .songs-table td {
@@ -369,7 +376,7 @@ footer {
 .dropdown-content {
     display: none;
     position: absolute;
-    background-color: rgb(179, 152, 255);
+    background-color: rgb(225, 255, 227);
     min-width: 160px;
     border-radius: 10px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
@@ -493,6 +500,120 @@ footer {
     color: black;
 }
 
-.main-content-auth .redirect-auth {
+.main-content-auth .redirect-auth, .central-view .redirect-auth {
     color: #00D12D;
 }
+
+
+
+.profile-content{
+    display: flex;
+    align-items: flex-start;
+    padding: 20px;
+    max-width: 100%;
+    margin: 2em auto; 
+    border-radius: 10px;
+    justify-content: center;
+    margin-top: 100px;
+    margin-bottom: 150px;
+}
+
+.profile {
+    flex: 1;
+    max-width: 20%; /* Occupies 1/5th of the page */
+    text-align: center;
+    margin-right: 1em; 
+    margin: 1em;
+    padding: 1em;
+    border-radius: 10px;
+    justify-content: center;
+    align-items: center;
+}
+.profile-photo {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+.profile-photo-nav {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    object-fit: cover;
+
+}
+.home-nav-a-pic {
+    color: #f1f1f1;
+    text-decoration: none;
+    margin-left: 1em;
+    font-weight: bold;
+    border-radius: 50%;
+    transition: background-color 0.3s;
+}
+
+.profile-view{
+    flex: 4; /* Occupies the remaining 4/5ths of the page */
+    padding-left: 30px;
+
+    background: linear-gradient(to top, #261544, #47277E); 
+    margin-right: 1em; 
+    margin-top: 1em;
+    margin: 1em;
+    padding: 1em;
+    border-radius: 10px;
+    justify-content: center;
+    align-items: center;
+}
+.user-description {
+    margin-bottom: 20px;
+    font-size: 1.2em;
+}
+
+.tables-flex {
+    display: flex;
+    justify-content: center;
+}
+
+.tables-flex h2 {
+    width: 50%;
+    padding-left: 200px;
+}
+
+.profile-table {
+    width: 40%;
+}
+
+.profile-table th {
+    padding: 12px 15px; 
+
+    color: #c0c0c0;
+    text-align: center;
+}
+
+.profile-table td, .profile-table td a {
+    padding: 12px 15px; 
+    border-radius: 10px;
+    color: #f1f1f1;
+    text-align: center;
+    text-decoration: none;
+}
+.profile-table td a:hover {
+    text-decoration: underline;
+}
+
+.profile-table th {
+
+    font-weight: bold;
+}
+
+.profile-table tr, .profile-table th {
+    border-bottom: 2px solid #000000; 
+}
+
+.profile-table td:last-child, .profile-table th:last-child {
+    border: none;
+}
+
+
+

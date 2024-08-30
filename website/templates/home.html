@@ -56,7 +56,6 @@
                                 </div>
                             </div>
                             <a class="drop-a" href="{{ url_for('views.delete_song', id = song[4]) }}">Delete</a>
-                            <button onclick="">Share</button>
                         </div>
                     </div>
                 </td>
@@ -72,10 +71,14 @@
     <div class="sidebar">
         <div class="sidebar-window">
             <h2>Here's some of the recent playlists:</h3>
+            {% if playlist_view %}
             {% for i in range(list_index) %}
-                <p class="playlist-homeview">{{ i+1 }} - <a href="{{ url_for('views.view_playlist', playlist_id = playlist_view[i][1]) }}">{{ playlist_view[i][2] }}</a>  -  made by {{ playlist_view[i][4] }}</p>
+            <p class="playlist-homeview">{{ i+1 }} - <a href="{{ url_for('views.view_playlist', playlist_id = playlist_view[i][1]) }}">{{ playlist_view[i][2] }}</a>  -  made by {{ playlist_view[i][4] }}</p>
             {% endfor %}
+            {% if list_index > 6 %}
             <p class="playlist-homeview-last">8 - <a>{{ playlist_view[7][2] }}</a>  -  made by {{ playlist_view[7][4] }}</p>
+            {% endif %}
+            {% endif %}
         </div>
 
         <div class="sidebar-window-2">
