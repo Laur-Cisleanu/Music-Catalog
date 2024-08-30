@@ -109,12 +109,12 @@ def add_song():
         user_id = current_user.user_id
 
         if 'location' not in request.files:
-            flash('no file part')
+            flash('no file part', category = 'error')
             return redirect(request.url)
         file = request.files['location']
 
         if file.filename == '':
-            flash('No selected file')
+            flash('No selected file', category = 'error')
             return redirect(request.url)
         
         if file and allowed_file(file.filename):
@@ -125,6 +125,7 @@ def add_song():
                             VALUES (?, ?, ?, ?, ?, ?, ?)""", (title, filename, author, genre, description, user, user_id))
             db.commit()
 
+            flash('Song added with success!', category = 'success')
             return redirect(url_for('views.home', name=filename))
 
     return render_template("add_song.html", user = current_user)
@@ -154,6 +155,7 @@ def edit_song(id):
             cursor.execute('UPDATE songs SET title = ?, author = ?, genre = ?, description = ? WHERE id = ?', 
                            (title, author, genre, description, id))
             db.commit()
+            flash('Song has been updated successfully!', category = 'success')
             return redirect(url_for('views.home'))
         
         return render_template("edit_song.html", user = current_user, song = song)
@@ -173,6 +175,8 @@ def delete_song(id):
             cursor.execute('DELETE FROM songs WHERE id = ?', (id,))
             cursor.execute('DELETE FROM playlists WHERE song_id = ?', (id,))
             db.commit()
+
+            flash('Song deleted successfully', category = 'success')
             return redirect(url_for('views.home'))
         except Exception as e:
             print(e)
@@ -295,7 +299,7 @@ def delete_playlist(playlist_id):
                     cursor.execute('UPDATE playlists SET entry = ? WHERE entry = ?', (i+1, song[i][8]))
                     db.commit()
 
-            flash("Song removed from the playlist successfully")
+            flash("Song removed from the playlist successfully", category = 'success')
             return redirect(url_for('views.edit_playlist', playlist_id = playlist_id))
     
         try:

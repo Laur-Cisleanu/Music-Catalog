@@ -2,42 +2,55 @@
 
 {% block title %}Edit {{ playlist[0][10] }}{% endblock %}
 {% block content %}
-<h1 align="center">Edit Playlist {{ playlist[0][10] }}</h3>
+<h1 class="screen-title" align="center">Edit Playlist {{ playlist[0][10] }}</h3>
 
 <div class="main-content-edit">
     
     <h2>Edit information:</h2>
     <div class="central-view">
         <form method="POST">
-            <label for="name">Playlist name</label>
-            <input type="name" 
+            <div class="playlist-edit">
+                <label for="name"><b>Playlist name</b></label>
+                <br />
+                <input type="name" 
+                    class="form-control" 
+                    id="name" 
+                    name="name" 
+                    placeholder="Enter the new name for the Playlist"
+                    value="{{ playlist[0][10] }}" />
+            </div>
+            <br />
+
+            <div class="playlist-edit">
+                <label for="private"><b>Set privacy option</b></label>
+                <select id="private" name="private">
+                    <option value="0">Public</option>
+                    <option value="1">Private</option>
+                </select>
+            </div>
+            <br />
+
+            <div class="playlist-edit">
+                <label for="description"><b>Description</b></label>
+                <br />
+                <textarea 
                 class="form-control" 
-                id="name" 
-                name="name" 
-                placeholder="Enter the new name for the Playlist"
-                value="{{ playlist[0][10] }}" />
+                id="description" 
+                name="description" 
+                placeholder="Add a new description..."
+                >{{ playlist[0][18] }}</textarea>
+            </div>
+            <br />
 
-            <label for="private">Set privacy option</label>
-            <select id="private" name="private">
-                <option value="0">Public</option>
-                <option value="1">Private</option>
-            </select>
-
-            <label for="description">Description</label>
-            <textarea 
-            class="form-control" 
-            id="description" 
-            name="description" 
-            placeholder="Add a new description..."
-            >{{ playlist[0][18] }}</textarea>
-            <button type="submit">Update</button>
+            <button class="submitbtn" type="submit">Update</button>
+            
         </form>
     </div>
-    <a href="{{ url_for('views.delete_playlist', playlist_id = playlist[0][9]) }}">Delete Playlist</a>
+    <a class="submitbtn" href="{{ url_for('views.delete_playlist', playlist_id = playlist[0][9]) }}">Delete Playlist</a>
 
     <h2>Edit the list of songs:</h2>
     <div class="central-view">
-        <table class="home-table">
+        <table class="songs-table">
             <tr>
                 <th>Order</th>
                 <th>Author</th>
@@ -53,8 +66,8 @@
                 <td>{{ song[1] }}</td>
                 <td>{{ song[4] }}</td>
                 <td>{{ song[7] }}</td>
-                <td><a href="{{ url_for('views.delete_playlist', playlist_id = playlist[0][9], song_entry = song[16]) }}">
-                    Remove song from playlist
+                <td><a class="submitbtn" href="{{ url_for('views.delete_playlist', playlist_id = playlist[0][9], song_entry = song[16]) }}">
+                    Remove
                 </a></td>
             </tr>
             {% endfor %}

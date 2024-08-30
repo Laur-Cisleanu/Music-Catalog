@@ -2,15 +2,18 @@
 {% block title %}<h1>Playlists</h1>{% endblock %}
 
 {%block content %}
-
-<h1 align="center">Recent playlists</h1>
+<h1 class="screen-title" align="center">Recent playlists</h1>
 <br />
-<div class="main-content">
+
+<div class="main-content-edit">
+    <h2 align="center">Playlists:</h2>
+
     <div class="central-view">
         <table align="center" class="home-table">
             <tr>
                 <th>Name</th>
                 <th>Made by</th>
+                <th></th>
                 <th></th>
             </tr>
             {% for playlist in playlists %}

@@ -2,45 +2,51 @@
 {% block title %}edit_song{% endblock %}
 
 {% block content %}
-<form method="POST">
-    <div class="central-view-edit">
-        <table >
-            <tr>
-                <th>Author</th>
-                <th>Title</th>
-                <th>Genre</th>
-            </tr>
-            <tr>
-                <th>
-                    <input type="text" 
-                    class="form-control" 
-                    id="author" 
-                    name="author" 
-                    placeholder="{{ song[3] }}"
-                    value="{{ song[3] }}"/>
-                </th>
-                <th>
-                    <input type="text" 
-                    class="form-control" 
-                    id="title" 
-                    name="title" 
-                    placeholder="{{ song[1] }}"
-                    value="{{ song[1] }}"/>
-                </th>
-                <th>
-                    <input type="text" 
-                    class="form-control" 
-                    id="genre" 
-                    name="genre" 
-                    placeholder="{{ song[4] }}"
-                    value="{{ song[4] }}"/>
-                </th>
-            </tr>
-        </table>
-        <textarea id="description" name="description">{{ song[5] }}</textarea>
-        <br />
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </div> 
-</form>
+<h1 class="screen-title" align="center">Edit Song</h1>
+
+<div class="main-content-edit">
+    <h2>Update song information</h2>
+
+    <form method="POST">
+        <div class="central-view-edit">
+            <table >
+                <tr>
+                    <th>Author</th>
+                    <th>Title</th>
+                    <th>Genre</th>
+                </tr>
+                <tr>
+                    <th>
+                        <input type="text" 
+                        class="form-control" 
+                        id="author" 
+                        name="author" 
+                        placeholder="{{ song[3] }}"
+                        value="{{ song[3] }}"/>
+                    </th>
+                    <th>
+                        <input type="text" 
+                        class="form-control" 
+                        id="title" 
+                        name="title" 
+                        placeholder="{{ song[1] }}"
+                        value="{{ song[1] }}"/>
+                    </th>
+                    <th>
+                        <input type="text" 
+                        class="form-control" 
+                        id="genre" 
+                        name="genre" 
+                        placeholder="{{ song[4] }}"
+                        value="{{ song[4] }}"/>
+                    </th>
+                </tr>
+            </table>
+            <textarea id="description" name="description">{{ song[5] }}</textarea>
+            <br />
+            <button class="submitbtn" type="submit" class="btn btn-primary">Update</button>
+        </div> 
+    </form>
+</div>
 
 {% endblock %}

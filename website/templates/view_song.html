@@ -2,6 +2,8 @@
 {% block title %}{{ song[1] }}{% endblock %}
 
 {% block content %}
+<h1 class="screen-title" align="center">Song {{ song[1] }}</h1>
+
 <div class="main-content-edit">
     <h2>Song information:</h2>
     <form>
@@ -11,16 +13,16 @@
     <div class="central-view">
         <table class="home-table">
             <tr>
-                <th>Author</th>
                 <th>Title</th>
+                <th>Author</th>               
                 <th>Genre</th>
                 <th>Added by</th>
                 <th>Play!</th>
                 <th></th>
             </tr>
             <tr>
-                <td>{{ song[3] }}</td>
                 <td>{{ song[1] }}</td>
+                <td>{{ song[3] }}</td>
                 <td>{{ song[4] }}</td>
                 <td>{{ song[7] }}</td>
                 <td><audio controls>

@@ -2,7 +2,7 @@
 {%  block title %}{{ playlist_name }}{% endblock %}
 
 {%  block content %}
-<h1 align="center">{{ playlist_name }}</h1>
+<h1 class="screen-title" align="center">{{ playlist_name }}</h1>
 <br />
 
 <div class="main-content-edit">
@@ -31,11 +31,10 @@
                 </td>
                 <td>
                     <div class="dropdown">
-                        <button class="dropbtn">Options</button>
+                        <button class="dropbtn"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M6 12c0 1.657-1.343 3-3 3s-3-1.343-3-3 1.343-3 3-3 3 1.343 3 3zm9 0c0 1.657-1.343 3-3 3s-3-1.343-3-3 1.343-3 3-3 3 1.343 3 3zm9 0c0 1.657-1.343 3-3 3s-3-1.343-3-3 1.343-3 3-3 3 1.343 3 3z"/></svg></button>
                         <div class="dropdown-content">
-                            <a href="{{ url_for('views.view_song', id = song[3]) }}">View</a>
-                            <a   href="{{ url_for('views.edit_song', id = song[3]) }}">Edit</a>
-                            <button onclick="">Edit</button>
+                            <a class="drop-a" href="{{ url_for('views.view_song', id = song[3]) }}">View</a>
+                            <a class="drop-a" href="{{ url_for('views.edit_song', id = song[3]) }}">Edit</a>
                             <div class="dropdown-secondary">
                                 <button>Add to playlist</button>
                                 <div class="dropdown-secondary-content">
@@ -60,8 +59,8 @@
     </div>
     
     <form>
-        <a href="{{ url_for('views.edit_playlist', playlist_id = playlist_id) }}">Edit playlist</a>
-        <a href="{{ url_for('views.delete_playlist', playlist_id = playlist_id) }}">Delete Playlist</a>
+        <a class="submitbtn" href="{{ url_for('views.edit_playlist', playlist_id = playlist_id) }}">Edit playlist</a>
+        <a class="submitbtn" href="{{ url_for('views.delete_playlist', playlist_id = playlist_id) }}">Delete Playlist</a>
     </form>
 </div>
 {% endblock %}

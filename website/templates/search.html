@@ -18,6 +18,7 @@
             {% endif %}
             order
         </p>
+
         <table align="center" class="home-table">
             <tr>
                 <th><a href="{{ url_for('views.search_sort', sort_by = 'author', order = order, search_by = search_by) }}">Author</a></th>
@@ -43,11 +44,11 @@
                 </td>
                 <td>
                     <div class="dropdown">
-                        <button class="dropbtn">Options</button>
+                        <button class="dropbtn"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M6 12c0 1.657-1.343 3-3 3s-3-1.343-3-3 1.343-3 3-3 3 1.343 3 3zm9 0c0 1.657-1.343 3-3 3s-3-1.343-3-3 1.343-3 3-3 3 1.343 3 3zm9 0c0 1.657-1.343 3-3 3s-3-1.343-3-3 1.343-3 3-3 3 1.343 3 3z"/></svg></button>
 
                         <div class="dropdown-content">
-                            <a href="{{ url_for('views.view_song', id = song[4]) }}">View</a>
-                            <a   href="{{ url_for('views.edit_song', id = song[4]) }}">Edit</a>
+                            <a class="drop-a" href="{{ url_for('views.view_song', id = song[4]) }}">View</a>
+                            <a class="drop-a" href="{{ url_for('views.edit_song', id = song[4]) }}">Edit</a>
 
                             <div class="dropdown-secondary">
                                 <button>Add to playlist</button>
@@ -64,7 +65,7 @@
                                     </form>
                                 </div>
                             </div>
-                            <a   href="{{ url_for('views.delete_song', id = song[4]) }}">Delete</a>
+                            <a class="drop-a" href="{{ url_for('views.delete_song', id = song[4]) }}">Delete</a>
                             <button onclick="">Share</button>
                         </div>
                     </div>
@@ -74,7 +75,7 @@
         </table>
         
         <p align="right">
-            <a href="{{ url_for('views.add_song') }}">Add Song</a>
+            <a class="addSongbtn" href="{{ url_for('views.add_song') }}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm6 13h-5v5h-2v-5h-5v-2h5v-5h2v5h5v2z"/></svg></a>
         </p>
     </div>
 </div>
