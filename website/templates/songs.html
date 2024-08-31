@@ -34,7 +34,7 @@
                 <td>{{ song[1] }}</td>
                 <td>{{ song[0] }}</td>
                 <td>{{ song[5] }}</td>
-                <td>{{ song[2] }}</td>
+                <td><a href="{{ url_for('views.profile', user_id = song[6]) }}">{{ song[2] }}</a></td>
                 <td>
                     <audio controls>
                         <source src="{{ url_for('static', filename = 'uploads/' + song[3]) }}" type="audio/mpeg">

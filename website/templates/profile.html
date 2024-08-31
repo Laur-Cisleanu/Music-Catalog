@@ -50,7 +50,7 @@
                                     <button>Add to playlist</button>
                                     <div class="dropdown-secondary-content">
                                         {% for playlist in playlists %}
-                                        <a href="{{ url_for('views.add_to_playlist', playlist_id = playlist[1], song_id = song[0]) }}">{{ playlist[2] }}</a>
+                                        <a class="drop-a" href="{{ url_for('views.add_to_playlist', playlist_id = playlist[1], song_id = song[0]) }}">{{ playlist[2] }}</a>
                                         {% endfor %}
                                         <form class="PL-form" action="{{ url_for('views.create_playlist', song_id = song[0]) }}" method="POST">
                                             <div>

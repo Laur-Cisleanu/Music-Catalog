@@ -26,9 +26,9 @@
                 <a class="home-nav-a" id="view_playlists" href="/view_playlists">Playlists</a>
                 <a class="home-nav-a" id="songs" href="{{ url_for('views.sort', sort_by = 'id', order = 'desc') }}">Songs</a>
                 <a class="home-nav-a" id="home" href="/">Home</a>
-                {% if user_info[6] %}
+                {% if users_info[6] %}
                 <a class="home-nav-a-pic" id="profile" href="{{ url_for('views.profile', user_id = current_user.user_id) }}">
-                    <img src="{{ url_for('static', filename = 'uploads/' + user_info[6]) }}" alt="Profile Photo" class="profile-photo-nav">
+                    <img src="{{ url_for('static', filename = 'uploads/' + users_info[6]) }}" alt="Profile Photo" class="profile-photo-nav">
                 </a>
                 {% else %}
                 <a class="home-nav-a" id="home" href="{{ url_for('views.profile', user_id = current_user.user_id) }}">Profile</a>

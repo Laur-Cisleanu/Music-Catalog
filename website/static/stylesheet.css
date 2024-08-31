@@ -398,7 +398,7 @@ footer {
     width: 100%;
     text-align: left;
 }
-.dropdown-content .drop-a {
+.dropdown-content .drop-a, td .dropdown-content .drop-a {
     color: black;
     padding: 12px 16px;
     text-decoration: none;
@@ -563,7 +563,7 @@ footer {
     padding: 1em;
     border-radius: 10px;
     justify-content: center;
-    align-items: center;
+
 }
 .user-description {
     margin-bottom: 20px;
@@ -616,4 +616,15 @@ footer {
 }
 
 
-
+.profile-table td .drop-a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    font-weight: normal;
+    border: none;
+    background: none;
+    font-size: 13px;
+    width: 80%;
+    text-align: left;
+}

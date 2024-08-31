@@ -28,7 +28,7 @@
                 <td><a href="{{ url_for('views.view_song', id = song[4]) }}">{{ song[1] }}</a></td>
                 <td>{{ song[0] }}</td>
                 <td>{{ song[5] }}</td>
-                <td>{{ song[2] }}</td>
+                <td><a href="{{ url_for('views.profile', user_id = song[6]) }}">{{ song[2] }}</a></td>
                 <td>
                     <audio controls>
                         <source src="{{ url_for('static', filename = 'uploads/' + song[3]) }}" type="audio/mpeg">
@@ -75,9 +75,6 @@
             {% for i in range(list_index) %}
             <p class="playlist-homeview">{{ i+1 }} - <a href="{{ url_for('views.view_playlist', playlist_id = playlist_view[i][1]) }}">{{ playlist_view[i][2] }}</a>  -  made by {{ playlist_view[i][4] }}</p>
             {% endfor %}
-            {% if list_index > 6 %}
-            <p class="playlist-homeview-last">8 - <a>{{ playlist_view[7][2] }}</a>  -  made by {{ playlist_view[7][4] }}</p>
-            {% endif %}
             {% endif %}
         </div>
 
